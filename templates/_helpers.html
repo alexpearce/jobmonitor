@@ -1,0 +1,27 @@
+{# Return a list item containing an anchor to the endpoint. If the endpoint is active, an 'active' class is added to the list item. #}
+{% macro nav_list_link(endpoint, name, li_cls='', a_cls='') %}
+  {% set active_cls = 'active' if active_endpoint(endpoint) else '' %}
+  <li class="{{ active_cls }} {{ li_cls }}">
+    <a href="{{ url_for(endpoint) }}" class="{{ a_cls }}">{{ name }}</a>
+  </li>
+{% endmacro %}
+
+{# Return True if the endpoint argument matches the beginning of the request endpoint #}
+{% macro active_endpoint(endpoint) %}
+  {%- if endpoint == request.endpoint[0:endpoint | length] -%}
+    True
+  {%- endif -%}
+{% endmacro %}
+
+{# Return True if the endpoint argument matches the request endpoint exactly #}
+{# Generally you want 'fuzzy' matching, so that parents are matched, but sometimes you don't! #}
+{% macro active_endpoint_absolute(endpoint) %}
+  {%- if endpoint == request.endpoint -%}
+    True
+  {%- endif -%}
+{% endmacro %}
+
+{# If the endpoint is the current one, render then #}
+{% macro active_endpoint_then(endpoint, then) %}
+  {{ then | safe if active_endpoint(endpoint) else '' }}
+{% endmacro %}

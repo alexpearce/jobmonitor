@@ -1,0 +1,69 @@
+body {
+  /* Move down content to compensate for fixed nav bar */
+  padding-top: 50px;
+}
+
+.sidebar {
+  /* Hide for mobile, show later */
+  display: none;
+}
+
+.nav-sidebar {
+  margin-left: -20px;
+  /* 20px padding + 1px border */
+  margin-right: -21px;
+  margin-bottom: 20px;
+}
+
+.nav-sidebar > li > a {
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.nav-sidebar .active a {
+  background-color: #428bca;
+  color: #fff;
+}
+
+.nav-sidebar .active a:hover {
+  background-color: #2972b1;
+}
+
+.main {
+  padding: 20px;
+}
+
+.main h1:first-child {
+  margin-top: 0;
+}
+
+.velo-overview-table td, .velo-overview-table th {
+  text-align: center;
+}
+
+.velo-overview-table td:last-child {
+  text-align: left;
+}
+
+.histogram {
+  height: 400px;
+}
+
+@media (min-width: 768px) {
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 1000;
+    display: block;
+    padding: 70px 20px 20px;
+    border-right: 1px solid #eee;
+    background-color: #f5f5f5;
+  }
+
+  .main {
+    padding-left: 40px;
+    padding-right: 40px;
+  }
+}

@@ -1,0 +1,19 @@
+{% extends "velo_view/trends/trends.html" %}
+{% block pageheader %}Trends{% endblock %}
+{% block pagesubheader %}Vertices{% endblock %}
+{% block pageModule %}veloView.trends.vertices{% endblock %}
+{% block body %}
+  {{ super() }}
+  <div class="row">
+    <div class="col-sm-6 histogram" data-file="histograms.root" data-histogram="histogram_0">
+    </div>
+    <div class="col-sm-6 histogram" data-file="histograms" data-histogram="histogram_1">
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-6 histogram" data-file="histograms" data-histogram="histogram_2">
+    </div>
+    <div class="col-sm-6 histogram" data-file="histograms" data-histogram="histogram_3">
+    </div>
+  </div>
+{% endblock %}

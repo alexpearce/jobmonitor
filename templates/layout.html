@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>VELO Web GUI</title>
+  <meta name="description" content="A web app displaying information on the Vertex Location">
+  <!--
+    Favicon from the Fugue set, released under Creative Commons Attribution 3.0 License.
+    http://p.yusukekamiyamane.com/
+  -->
+  <link rel="shortcut icon" href="{{ url_for('assets', filename='favicon.ico') }}">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="{{ url_for('assets', filename='stylesheets/velo.css') }}">
+</head>
+<body>
+  <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="/">VELO Web GUI</a>
+      </div>
+      <div class="navbar-collapse collapse">
+        <ul class="nav navbar-nav navbar-right">
+          {% from "_helpers.html" import nav_list_link %}
+          {{ nav_list_link('velo_view', 'VELO view') }}
+          {{ nav_list_link('sensor_view', 'Sensor view') }}
+          {{ nav_list_link('run_view', 'Run view') }}
+          {{ nav_list_link('tell1_view', 'TELL1 view') }}
+          {{ nav_list_link('special_analyses', 'Special analyses') }}
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="container-fluid">
+    <div class="row">
+      <sidebar class="col-sm-3 col-md-2 sidebar">
+        <ul class="nav nav-sidebar">
+          {% block navsidebar %}{% endblock %}
+        </ul>
+      </sidebar>
+      <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" id="main">
+      <h1 class="page-header">
+        {% block pageheader %}{% endblock %}
+        <small>{% block pagesubheader %}{% endblock %}</small>
+      </h1>
+      {% block body %}{% endblock %}
+      </div>
+    </div>
+  </div>
+  <!-- jQuery for AJAX calls and DOM manipulation. -->
+  <script defer src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+  <!-- Bootstrap.js for Bootstrap interactivity. -->
+  <script defer src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+  <!-- Highcharts for plotting. -->
+  <script defer src="//code.highcharts.com/highcharts.js"></script>
+  <!-- Highcharts more package for 'errorbars' chart type. -->
+  <script defer src="//code.highcharts.com/highcharts-more.js"></script>
+  <!-- Loading indicators with Spin.js -->
+  <script defer src="{{ url_for('assets', filename='javascripts/spin.js') }}"></script>
+  <!-- App JS. -->
+  <script defer src="{{ url_for('assets', filename='javascripts/velo.js') }}"></script>
+  <script>
+  // Strings referring to page-specific modules in the velo.js module.
+  // A string like e.g. `veloView.detailedTrends` will call `init` of `VELO.veloView`,
+  // and then `init` of `VELO.veloView.detailedTrends`.
+    var veloPageModule = '{% block pageModule %}{% endblock %}';
+  </script>
+</body>
+</html>
