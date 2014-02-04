@@ -14,6 +14,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="{{ url_for('assets', filename='stylesheets/bootstrap-datepicker.css') }}">
   <link rel="stylesheet" href="{{ url_for('assets', filename='stylesheets/velo.css') }}">
 </head>
 <body>
@@ -60,6 +61,8 @@
   <script defer src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
   <!-- Bootstrap.js for Bootstrap interactivity. -->
   <script defer src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+  <!-- Bootstrap datepicker for cool date inputs. -->
+  <script defer src="{{ url_for('assets', filename='javascripts/bootstrap-datepicker.js') }}"></script>
   <!-- Highcharts for plotting. -->
   <script defer src="//code.highcharts.com/highcharts.js"></script>
   <!-- Highcharts more package for 'errorbars' chart type. -->

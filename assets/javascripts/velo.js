@@ -46,6 +46,17 @@ var VELO = (function($, undefined) {
       radius: 5,
       trail: 50,
       shadow: false
+    },
+    // See http://eternicode.github.io/bootstrap-datepicker/
+    datepickerDefaults: {
+      format: 'dd/mm/yyyy',
+      // This app doesn't now about the future
+      endDate: '+0d',
+      todayBtn: 'linked',
+      // Always pop under the field
+      orientation: 'top auto',
+      autoclose: true,
+      todayHighlight: true
     }
   };
 
@@ -215,6 +226,9 @@ var VELO = (function($, undefined) {
         loadHistogramFromFileIntoContainer(histogram, file, $el);
       }
     });
+
+    // Add datepicker to appropriate fields
+    $('.main').find('.input-daterange').datepicker(settings.datepickerDefaults);
   };
 
   return {

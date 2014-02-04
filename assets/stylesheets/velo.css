@@ -42,6 +42,24 @@ body {
   margin: 40px 0;
 }
 
+.trends-vs-selector {
+  padding-top: 20px;
+  text-align: center;
+}
+
+.run-range-form {
+  padding: 20px 0;
+}
+
+.run-range-form label {
+  margin-top: 4px;
+}
+
+.input-daterange {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
 @media (min-width: 768px) {
   body {
     /* Move down content to compensate for fixed nav bar */
@@ -73,7 +91,16 @@ body {
 
   .histogram {
     height: 400px;
-    margin: 0;
-    padding: 20px 0 0 0;
+    margin: 0 0 10px 0;
+    padding: 0 10px;
+  }
+
+  /* Vertically center the label */
+  .run-range-form label {
+    margin-top: 4px;
+  }
+
+  .input-daterange {
+    margin-bottom: 0px;
   }
 }

@@ -1,4 +1,4 @@
-{% from "_helpers.html" import active_endpoint_then, active_endpoint_absolute %}
+{% from "_helpers.html" import active_endpoint_then, active_endpoint_absolute, run_range_form %}
 {% extends "velo_view/velo_view.html" %}
 {% block pageheader %}Trends{% endblock %}
 {% block pageModule %}veloView.trends{% endblock %}
@@ -10,4 +10,16 @@
     {{ nav_list_link('velo_view_trends_tracks', 'Tracks') }}
     {{ nav_list_link('velo_view_trends_vertices', 'Vertices') }}
   </ul>
+  {{ run_range_form() }}
+  {% block childbody %}
+  {% endblock %}
+  <div class="trends-vs-selector">
+    <div class="btn-group">
+      <button type="button" class="btn btn-default disabled" disabled>Trend vs.</button>
+      <button type="button" class="btn btn-primary">Run number</button>
+      <button type="button" class="btn btn-default">Time</button>
+      <button type="button" class="btn btn-default">Luminosity</button>
+      <button type="button" class="btn btn-default">Fluence</button>
+    </div>
+  </div>
 {% endblock %}
