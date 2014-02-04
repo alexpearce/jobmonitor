@@ -51,8 +51,12 @@ body {
   padding: 20px 0;
 }
 
-.run-range-form label {
+.run-range-form p {
   margin-top: 4px;
+}
+
+.trend-indicators p {
+  margin-top: 10px;
 }
 
 .input-daterange {
