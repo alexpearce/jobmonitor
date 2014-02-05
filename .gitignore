@@ -1,1 +1,4 @@
+# virtualenv
+venv
+# ROOT TFiles
 assets/files/*.root
