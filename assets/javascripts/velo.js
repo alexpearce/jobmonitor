@@ -161,6 +161,16 @@ var VELO = (function($, undefined) {
         if (payload['key_class'] !== 'TH1F') return;
         displayHistogram(payload['key_data'], container);
       }
+    }).fail(function() {
+      container.html(''
+        + '<div class="alert alert-danger">'
+        + 'There was a problem retrieving histogram <code>'
+        + histogram
+        + '</code> from file <code>'
+        + file
+        + '</code>. Please contact the administrator.'
+        + '</div>'
+      );
     });
   };
 
@@ -205,8 +215,10 @@ var VELO = (function($, undefined) {
   var init = function(pageModule) {
     var components = pageModule.split('.'),
         parentModule = pages,
-        modules = [];
-    // Work our way down the chain, top to bottom, calling `init` on each successive child, if it exists.
+        modules = [],
+        $main = $('.main');
+
+    // Work our way down the module chain, top to bottom, calling `init` on each successive child, if it exists.
     $.each(components, function(index, component) {
       var current = parentModule[component];
       modules.push(current);
@@ -217,7 +229,7 @@ var VELO = (function($, undefined) {
     });
 
     // Find any elements requiring histograms from files and load them
-    $('.main').find('.histogram').each(function(index, el) {
+    $main.find('.histogram').each(function(index, el) {
       var $el = $(el),
           file = $el.data('file'),
           histogram = $el.data('histogram');
@@ -228,7 +240,7 @@ var VELO = (function($, undefined) {
     });
 
     // Add datepicker to appropriate fields
-    $('.main').find('.input-daterange').datepicker(settings.datepickerDefaults);
+    $main.find('.input-daterange').datepicker(settings.datepickerDefaults);
   };
 
   return {
