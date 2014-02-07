@@ -2,12 +2,12 @@ import ROOT
 from flask import (
     Flask,
     render_template,
-    url_for,
     send_from_directory,
     send_file,
     jsonify
 )
-# Define the app
+
+# Define the app and its configuration
 app = Flask(__name__)
 app.config['ASSETS_DIRECTORY'] = './assets'
 app.config['FILES_DIRECTORY'] = '{0}/files'.format(app.config['ASSETS_DIRECTORY'])
@@ -53,9 +53,6 @@ def data_for_object(obj):
 @app.route('/velo_view/overview')
 def velo_view_overview():
     return render_template('velo_view/overview.html')
-
-# def velo_view_trends():
-#     return render_template('velo_view/trends.html')
 
 @app.route('/velo_view/trends', endpoint='velo_view_trends')
 @app.route('/velo_view/trends/nzs')
