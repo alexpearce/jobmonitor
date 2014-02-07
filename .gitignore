@@ -2,3 +2,5 @@
 venv
 # ROOT TFiles
 assets/files/*.root
+# Python byte code files
+*.pyc
