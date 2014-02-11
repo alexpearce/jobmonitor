@@ -1,3 +1,15 @@
+{# Return a stylesheet link tag. #}
+{# If asset, construct URL as `assets/stylesheets/name.css`, else assume URL is name. #}
+{% macro stylesheet_tag(name, asset=True) %}
+  <link rel="stylesheet" href="{{ url_for('assets', filename='stylesheets/{0}.css'.format(name)) if asset else name }}">
+{% endmacro %}
+
+{# Return a JavaScript link tag. #}
+{# If asset, construct URL as `assets/javascripts/name.js`, else assume URL is name. #}
+{% macro javascript_tag(name, asset=True) %}
+  <script src="{{ url_for('assets', filename='javascripts/{0}.js'.format(name)) if asset else name }}"></script>
+{% endmacro %}
+
 {# Return a list item containing an anchor to the endpoint. If the endpoint is active, an 'active' class is added to the list item. #}
 {% macro nav_list_link(endpoint, name, li_cls='', a_cls='') %}
   {% set active_cls = 'active' if active_endpoint(endpoint) else '' %}

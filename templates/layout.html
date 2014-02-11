@@ -1,3 +1,4 @@
+{% from "_helpers.html" import stylesheet_tag, javascript_tag %}
 <!doctype html>
 <html lang="en">
 <head>
@@ -13,9 +14,9 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css">
-  <link rel="stylesheet" href="{{ url_for('assets', filename='stylesheets/bootstrap-datepicker.css') }}">
-  <link rel="stylesheet" href="{{ url_for('assets', filename='stylesheets/velo.css') }}">
+  {{ stylesheet_tag('//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css', False) }}
+  {{ stylesheet_tag('bootstrap-datepicker') }}
+  {{ stylesheet_tag('velo') }}
 </head>
 <body>
   <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -44,37 +45,32 @@
   <div class="container-fluid">
     <div class="row">
       <sidebar class="col-sm-3 col-md-2 sidebar">
-        <ul class="nav nav-sidebar">
-          {% block navsidebar %}{% endblock %}
-        </ul>
+        <ul class="nav nav-sidebar">{% block navsidebar %}{% endblock %}</ul>
       </sidebar>
       <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" id="main">
-      <h1 class="page-header">
-        {% block pageheader %}{% endblock %}
-        <small>{% block pagesubheader %}{% endblock %}</small>
-      </h1>
+      <h1 class="page-header">{% block pageheader %}{% endblock %}</h1>
       {% block body %}{% endblock %}
       </div>
     </div>
   </div>
   <!-- jQuery for AJAX calls and DOM manipulation. -->
-  <script defer src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+  {{ javascript_tag('//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js', False) }}
   <!-- Bootstrap.js for Bootstrap interactivity. -->
-  <script defer src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+  {{ javascript_tag('//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js', False) }}
   <!-- Bootstrap datepicker for cool date inputs. -->
-  <script defer src="{{ url_for('assets', filename='javascripts/bootstrap-datepicker.js') }}"></script>
+  {{ javascript_tag('bootstrap-datepicker') }}
   <!-- Highcharts for plotting. -->
-  <script defer src="//code.highcharts.com/highcharts.js"></script>
+  {{ javascript_tag('//code.highcharts.com/highcharts.js', False) }}
   <!-- Highcharts more package for 'errorbars' chart type. -->
-  <script defer src="//code.highcharts.com/highcharts-more.js"></script>
+  {{ javascript_tag('//code.highcharts.com/highcharts-more.js', False) }}
   <!-- Loading indicators with Spin.js -->
-  <script defer src="{{ url_for('assets', filename='javascripts/spin.js') }}"></script>
+  {{ javascript_tag('spin') }}
   <!-- App JS. -->
-  <script defer src="{{ url_for('assets', filename='javascripts/velo.js') }}"></script>
+  {{ javascript_tag('velo') }}
   <script>
-  // Strings referring to page-specific modules in the velo.js module.
-  // A string like e.g. `veloView.detailedTrends` will call `init` of `VELO.veloView`,
-  // and then `init` of `VELO.veloView.detailedTrends`.
+    // Strings referring to page-specific modules in the velo.js module.
+    // A string like e.g. `veloView.detailedTrends` will call `init` of `VELO.veloView`,
+    // and then `init` of `VELO.veloView.detailedTrends`.
     var veloPageModule = '{% block pageModule %}{% endblock %}';
   </script>
 </body>
