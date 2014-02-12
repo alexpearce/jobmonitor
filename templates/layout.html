@@ -1,4 +1,4 @@
-{% from "_helpers.html" import stylesheet_tag, javascript_tag %}
+{% from "_helpers.html" import stylesheet_tag, javascript_tag, list_link_tag %}
 <!doctype html>
 <html lang="en">
 <head>
@@ -32,12 +32,11 @@
       </div>
       <div class="navbar-collapse collapse">
         <ul class="nav navbar-nav navbar-right">
-          {% from "_helpers.html" import nav_list_link %}
-          {{ nav_list_link('velo_view', 'VELO view') }}
-          {{ nav_list_link('sensor_view', 'Sensor view') }}
-          {{ nav_list_link('run_view', 'Run view') }}
-          {{ nav_list_link('tell1_view', 'TELL1 view') }}
-          {{ nav_list_link('special_analyses', 'Special analyses') }}
+          {{ list_link_tag('velo_view', 'VELO view') }}
+          {{ list_link_tag('sensor_view', 'Sensor view') }}
+          {{ list_link_tag('run_view', 'Run view') }}
+          {{ list_link_tag('tell1_view', 'TELL1 view') }}
+          {{ list_link_tag('special_analyses', 'Special analyses') }}
         </ul>
       </div>
     </div>

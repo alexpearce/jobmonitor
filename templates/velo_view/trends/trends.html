@@ -3,11 +3,10 @@
 {% block pageModule %}veloView.trends{% endblock %}
 {% block body %}
   <ul class="nav nav-tabs nav-justified">
-    {# The NZS tab is default for trends, so make it active if we're there, too #}
-    {{ nav_list_link('velo_view/trends/nzs', 'NZS') }}
-    {{ nav_list_link('velo_view/trends/clusters', 'Clusters') }}
-    {{ nav_list_link('velo_view/trends/tracks', 'Tracks') }}
-    {{ nav_list_link('velo_view/trends/vertices', 'Vertices') }}
+    {{ list_link_tag('velo_view/trends/nzs', 'NZS') }}
+    {{ list_link_tag('velo_view/trends/clusters', 'Clusters') }}
+    {{ list_link_tag('velo_view/trends/tracks', 'Tracks') }}
+    {{ list_link_tag('velo_view/trends/vertices', 'Vertices') }}
   </ul>
   {% include "velo_view/trends/_run_range_form.html" %}
   <div class="trend-indicators">

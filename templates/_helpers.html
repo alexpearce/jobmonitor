@@ -1,11 +1,15 @@
-{# Return a stylesheet link tag. #}
-{# If asset, construct URL as `assets/stylesheets/name.css`, else assume URL is name. #}
+{#
+  Return a stylesheet link tag.
+  If asset, construct URL as `assets/stylesheets/name.css`, else assume URL is name.
+#}
 {% macro stylesheet_tag(name, asset=True) %}
   <link rel="stylesheet" href="{{ url_for('assets', filename='stylesheets/{0}.css'.format(name)) if asset else name }}">
 {% endmacro %}
 
-{# Return a JavaScript link tag. #}
-{# If asset, construct URL as `assets/javascripts/name.js`, else assume URL is name. #}
+{#
+  Return a JavaScript link tag.
+  If asset, construct URL as `assets/javascripts/name.js`, else assume URL is name.
+#}
 {% macro javascript_tag(name, asset=True) %}
   <script src="{{ url_for('assets', filename='javascripts/{0}.js'.format(name)) if asset else name }}"></script>
 {% endmacro %}
@@ -15,7 +19,7 @@
   If the page is active, or is an ancestor of the active page,
   an 'active' class is added to the list item.
 #}
-{% macro nav_list_link(page, title) %}
+{% macro list_link_tag(page, title) %}
   <li class="{{ 'active' if active_page_or_ancestor(page) else '' }}">
     <a href="{{ url_for('serve_page', path=page) }}">{{ title }}</a>
   </li>
