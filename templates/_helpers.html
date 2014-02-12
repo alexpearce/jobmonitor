@@ -33,11 +33,6 @@
   {%- endif -%}
 {% endmacro %}
 
-{# If the endpoint is the current one, render then #}
-{% macro active_endpoint_then(endpoint, then) %}
-  {{ then | safe if active_endpoint(endpoint) else '' }}
-{% endmacro %}
-
 {# Display a form to select run ranges #}
 {% macro run_range_form() %}
   <div class="run-range-form">
