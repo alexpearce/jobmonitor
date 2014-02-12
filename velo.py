@@ -1,12 +1,23 @@
 import ROOT
+# Flask API: http://flask.pocoo.org/docs/api/
 from flask import (
+    # Creating app instances
     Flask,
+    # Rendering Jinja2 templates
     render_template,
+    # Serving assets
     send_from_directory,
+    # Serving custom filetypes
     send_file,
+    # JSON encode Python dictionaries
     jsonify,
-    g
+    # Set and access variables global to the app instance and views
+    g,
+    # Raise HTTP error code exceptions
+    abort
 )
+# So we can catch Jinja2 exception
+from jinja2.exceptions import TemplateNotFound
 
 # Define the app and its configuration
 app = Flask(__name__)
@@ -80,7 +91,15 @@ def serve_page(path):
     child_path = default_child_path(path)
     # Expose the child path value
     g.active_page = child_path
-    return render_template('{0}.html'.format(child_path))
+    # Try find a template called path.html, else 404
+    try:
+        return render_template('{0}.html'.format(child_path))
+    except TemplateNotFound:
+        abort(404)
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('errors/404.html'), 404
 
 # Assets API
 @app.route('/assets/<path:filename>')
