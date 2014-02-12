@@ -1,9 +1,8 @@
 {% extends "velo_view/velo_view.html" %}
-{% from "_helpers.html" import run_range_form %}
 {% block pageheader %}Detailed trends{% endblock %}
 {% block pageModule %}veloView.detailedTrends{% endblock %}
 {% block body %}
-  {{ run_range_form() }}
+  {% include "velo_view/trends/_run_range_form.html" %}
   <div class="histogram" data-file="histograms" data-histogram="histogram_0">
   </div>
 {% endblock %}
