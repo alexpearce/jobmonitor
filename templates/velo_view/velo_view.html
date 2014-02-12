@@ -1,10 +1,10 @@
 {% extends "layout.html" %}
 {% block navsidebar %}
-  {% from "_helpers.html" import nav_list_link, active_endpoint_absolute %}
+  {% from "_helpers.html" import nav_list_link %}
   {# The overview tab is default for VELO view, so make it active if we're there, too #}
-  {{ nav_list_link('velo_view_overview', 'Overview', 'active' if active_endpoint_absolute('velo_view') else '') }}
-  {{ nav_list_link('velo_view_trends', 'Trends') }}
-  {{ nav_list_link('velo_view_detailed_trends', 'Detailed trends') }}
+  {{ nav_list_link('velo_view/overview', 'Overview') }}
+  {{ nav_list_link('velo_view/trends', 'Trends') }}
+  {{ nav_list_link('velo_view/detailed_trends', 'Detailed trends') }}
   {% endblock %}
 {% block body %}
 {% endblock %}

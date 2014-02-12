@@ -1,14 +1,14 @@
-{% from "_helpers.html" import active_endpoint_absolute, run_range_form %}
+{% from "_helpers.html" import run_range_form %}
 {% extends "velo_view/velo_view.html" %}
 {% block pageheader %}Trends{% endblock %}
 {% block pageModule %}veloView.trends{% endblock %}
 {% block body %}
   <ul class="nav nav-tabs nav-justified">
     {# The NZS tab is default for trends, so make it active if we're there, too #}
-    {{ nav_list_link('velo_view_trends_nzs', 'NZS', 'active' if active_endpoint_absolute('velo_view_trends') else '') }}
-    {{ nav_list_link('velo_view_trends_clusters', 'Clusters') }}
-    {{ nav_list_link('velo_view_trends_tracks', 'Tracks') }}
-    {{ nav_list_link('velo_view_trends_vertices', 'Vertices') }}
+    {{ nav_list_link('velo_view/trends/nzs', 'NZS') }}
+    {{ nav_list_link('velo_view/trends/clusters', 'Clusters') }}
+    {{ nav_list_link('velo_view/trends/tracks', 'Tracks') }}
+    {{ nav_list_link('velo_view/trends/vertices', 'Vertices') }}
   </ul>
   {{ run_range_form() }}
   <div class="trend-indicators">

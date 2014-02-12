@@ -4,7 +4,8 @@ from flask import (
     render_template,
     send_from_directory,
     send_file,
-    jsonify
+    jsonify,
+    g
 )
 
 # Define the app and its configuration
@@ -47,49 +48,39 @@ def data_for_object(obj):
         d['axis_titles'] = (x_axis.GetTitle(), obj.GetYaxis().GetTitle())
     return d
 
+def default_child_path(path):
+    """Return the default child of the parent path, if it exists, else return path.
+
+    For example, the path `parent` should show the page `parent/child` by default,
+    unless another child is specified. This method will then return `parent/child`,
+    given `parent`. If `parent/child` should show `parent/child/grandchild` by default,
+    this method will return `parent/child/grandchild` given `parent`.
+    If no default child path exists, then `path` is returned.
+    Keyword arguments:
+    path -- The parent path to resolve in to its deepest default child path.
+    """
+    # Define mapping of parent path to its default child
+    defaults = {
+        '': 'velo_view',
+        'velo_view': 'velo_view/overview',
+        'velo_view/trends': 'velo_view/trends/nzs'
+    }
+    try:
+        # Recurse until we find a path with no default child
+        child_path = default_child_path(defaults[path])
+    except KeyError:
+        child_path = path
+    return child_path
+
 # Root URL shows VELO view
-@app.route('/')
-@app.route('/velo_view', endpoint='velo_view')
-@app.route('/velo_view/overview')
-def velo_view_overview():
-    return render_template('velo_view/overview.html')
-
-@app.route('/velo_view/trends', endpoint='velo_view_trends')
-@app.route('/velo_view/trends/nzs')
-def velo_view_trends_nzs():
-    return render_template('velo_view/trends/nzs.html')
-
-@app.route('/velo_view/trends/clusters')
-def velo_view_trends_clusters():
-    return render_template('velo_view/trends/clusters.html')
-
-@app.route('/velo_view/trends/tracks')
-def velo_view_trends_tracks():
-    return render_template('velo_view/trends/tracks.html')
-
-@app.route('/velo_view/trends/vertices')
-def velo_view_trends_vertices():
-    return render_template('velo_view/trends/vertices.html')
-
-@app.route('/velo_view/detailed_trends')
-def velo_view_detailed_trends():
-    return render_template('velo_view/detailed_trends.html')
-
-@app.route('/sensor_view')
-def sensor_view():
-    return render_template('sensor_view.html')
-
-@app.route('/run_view')
-def run_view():
-    return render_template('run_view.html')
-
-@app.route('/tell1_view')
-def tell1_view():
-    return render_template('tell1_view.html')
-
-@app.route('/special_analyses')
-def special_analyses():
-    return render_template('special_analyses.html')
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def serve_page(path):
+    # Find the default child page
+    child_path = default_child_path(path)
+    # Expose the child path value
+    g.active_page = child_path
+    return render_template('{0}.html'.format(child_path))
 
 # Assets API
 @app.route('/assets/<path:filename>')

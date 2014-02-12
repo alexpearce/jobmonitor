@@ -10,26 +10,31 @@
   <script src="{{ url_for('assets', filename='javascripts/{0}.js'.format(name)) if asset else name }}"></script>
 {% endmacro %}
 
-{# Return a list item containing an anchor to the endpoint. If the endpoint is active, an 'active' class is added to the list item. #}
-{% macro nav_list_link(endpoint, name, li_cls='', a_cls='') %}
-  {% set active_cls = 'active' if active_endpoint(endpoint) else '' %}
-  <li class="{{ active_cls }} {{ li_cls }}">
-    <a href="{{ url_for(endpoint) }}" class="{{ a_cls }}">{{ name }}</a>
+{#
+  Return a list item containing an anchor to the page.
+  If the page is active, or is an ancestor of the active page,
+  an 'active' class is added to the list item.
+#}
+{% macro nav_list_link(page, title) %}
+  <li class="{{ 'active' if active_page_or_ancestor(page) else '' }}">
+    <a href="{{ url_for('serve_page', path=page) }}">{{ title }}</a>
   </li>
 {% endmacro %}
 
-{# Return True if the endpoint argument matches the beginning of the request endpoint #}
-{% macro active_endpoint(endpoint) %}
-  {%- if endpoint == request.endpoint[0:endpoint | length] -%}
+{#
+  Return True if page is the active page, or if it is an ancestor of the active page, else False.
+  This is achieved by exploting the URL structure of a page. Take for example
+    page='parent'
+  This macro will return True for both
+    g.active_page = 'parent'
+  and
+    g.active_page = 'parent/child'
+#}
+{% macro active_page_or_ancestor(page) %}
+  {%- if page == g.active_page[0:page | length] -%}
     True
-  {%- endif -%}
-{% endmacro %}
-
-{# Return True if the endpoint argument matches the request endpoint exactly #}
-{# Generally you want 'fuzzy' matching, so that parents are matched, but sometimes you don't! #}
-{% macro active_endpoint_absolute(endpoint) %}
-  {%- if endpoint == request.endpoint -%}
-    True
+  {%- else -%}
+    False
   {%- endif -%}
 {% endmacro %}
 
