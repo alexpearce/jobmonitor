@@ -68,9 +68,11 @@
   {{ javascript_tag('velo') }}
   <script>
     // Strings referring to page-specific modules in the velo.js module.
-    // A string like e.g. `veloView.detailedTrends` will call `init` of `VELO.veloView`,
-    // and then `init` of `VELO.veloView.detailedTrends`.
-    var veloPageModule = '{% block pageModule %}{% endblock %}';
+    // The active_page var is formatted as parent_name/child_name, but the VELO
+    // module expects parentName/childName, so let's format it here.
+    var activePage = '{{ g.active_page }}'.replace(/_([a-z])/g, function(match, char) {
+      return char.toUpperCase();
+    });
   </script>
 </body>
 </html>

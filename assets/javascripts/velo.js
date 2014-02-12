@@ -213,7 +213,7 @@ var VELO = (function($, undefined) {
   // Returns:
   //   undefined
   var init = function(pageModule) {
-    var components = pageModule.split('.'),
+    var components = pageModule.split('/'),
         parentModule = pages,
         modules = [],
         $main = $('.main');
@@ -252,43 +252,5 @@ var VELO = (function($, undefined) {
 $(function() {
   VELO.settings.debug = true;
   // Away we go!
-  VELO.init(veloPageModule);
-  return;
-  var $main = $('#main'),
-      $header = $main.find('h2'),
-      $list = $main.find('ul'),
-      $histogram = $('#histogram');
-
-  // Attach the event handler for all current and future list item anchors
-  $list.on('click', 'li a', function(e) {
-    var $target = $(e.target),
-        filename = $target.data('filename'),
-        keyname = $target.data('keyname'),
-        url = '/files/' + filename + '/' + keyname;
-    $.getJSON(url, function(data, status, jqXHR) {
-      // We can only handle TH1F objects at the moment
-      var payload = data['data'];
-      if (payload['key_class'] !== 'TH1F') return;
-      VELO.displayHistogram(payload['key_data'], $histogram);
-    });
-    e.preventDefault();
-  });
-  listURL = '/files/histograms/list';
-  $.getJSON(listURL, function(data, status, jqXHR) {
-    if (data['success'] === true) {
-      var payload = data['data'],
-          filename = payload['filename'];
-      $header.html('Listing <code>' + payload['filename'] + '</code>');
-      // Clear the list and then populate it with one list item per key
-      $list.html('');
-      if (payload['keys'].length === 0) {
-        $list.append('<li>File is empty</li>');
-      }
-      $.map(payload['keys'], function(key) {
-        $list.append('<li><a data-filename="' + filename + '" data-keyname="' + key + '" href="#">' + key + '</a></li>');
-      });
-    } else {
-      console.error('JSON request failed with message', data['message']);
-    }
-  });
+  VELO.init(activePage);
 });
