@@ -1,7 +1,7 @@
 # virtualenv
 venv
 # ROOT TFiles
-assets/files/*.root
+*.root
 # Python byte code files
 *.pyc
 # Vagrant
