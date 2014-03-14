@@ -4,3 +4,5 @@ venv
 assets/files/*.root
 # Python byte code files
 *.pyc
+# Vagrant
+.vagrant
