@@ -23,6 +23,12 @@ from jinja2.exceptions import TemplateNotFound
 app = Flask(__name__)
 app.config['ASSETS_DIRECTORY'] = './assets'
 app.config['FILES_DIRECTORY'] = '{0}/files'.format(app.config['ASSETS_DIRECTORY'])
+# Define mapping of parent path to its default child
+app.config['DEFAULT_CHILDREN'] = {
+    '': 'velo_view',
+    'velo_view': 'velo_view/overview',
+    'velo_view/trends': 'velo_view/trends/nzs'
+}
 
 def add_file_extension(filename):
     """Add `.root` extension to `filename`, if it's not already present."""
@@ -70,15 +76,9 @@ def default_child_path(path):
     Keyword arguments:
     path -- The parent path to resolve in to its deepest default child path.
     """
-    # Define mapping of parent path to its default child
-    defaults = {
-        '': 'velo_view',
-        'velo_view': 'velo_view/overview',
-        'velo_view/trends': 'velo_view/trends/nzs'
-    }
     try:
         # Recurse until we find a path with no default child
-        child_path = default_child_path(defaults[path])
+        child_path = default_child_path(app.config['DEFAULT_CHILDREN'][path])
     except KeyError:
         child_path = path
     return child_path
