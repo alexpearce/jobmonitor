@@ -1,4 +1,3 @@
-import ROOT
 # Flask API: http://flask.pocoo.org/docs/api/
 from flask import (
     # Creating app instances
@@ -19,6 +18,9 @@ from flask import (
 # So we can catch Jinja2 exception
 from jinja2.exceptions import TemplateNotFound
 
+# ROOT tasks
+import tasks
+
 # Define the app and its configuration
 app = Flask(__name__)
 app.config['ASSETS_DIRECTORY'] = './assets'
@@ -37,33 +39,6 @@ def add_file_extension(filename):
 def tfile_path(filename):
     """Return the path to the TFile with `filename`."""
     return '{0}/{1}'.format(app.config['FILES_DIRECTORY'], filename)
-
-def data_for_object(obj):
-    """Return a dictionary representing the data inside the object."""
-    obj_class = obj.ClassName()
-    d = {
-        'name': obj.GetName(),
-        'title': obj.GetTitle()
-    }
-    if obj_class[0:3] == 'TH1':
-        # For histograms, we provide
-        #   binning: Array of 2-tuples defining the (low, high) binning edges,
-        #   values: Array of bin contents, ith entry falling in the ith bin
-        #   uncertainties: Array of 2-tuples of (low, high) errors on the contents
-        #   axis_titles: 2-tuple of (x, y) axis titles
-        x_axis = obj.GetXaxis()
-        num_bins = x_axis.GetNbins()
-        d['binning'] = [
-            (x_axis.GetBinLowEdge(i), x_axis.GetBinUpEdge(i))
-            for i in range(num_bins)
-        ]
-        d['values'] = [obj.GetBinContent(i) for i in range(num_bins)]
-        d['uncertainties'] = [
-            (obj.GetBinErrorLow(i), obj.GetBinErrorUp(i))
-            for i in range(num_bins)
-        ]
-        d['axis_titles'] = (x_axis.GetTitle(), obj.GetYaxis().GetTitle())
-    return d
 
 def default_child_path(path):
     """Return the default child of the parent path, if it exists, else return path.
@@ -121,54 +96,12 @@ def get_file(filename):
 @app.route('/files/<filename>/list')
 def list_file(filename):
     filename = add_file_extension(filename)
-    f = ROOT.TFile(tfile_path(filename))
-    if f.IsZombie():
-        d = {
-            'success': False,
-            'message': 'Could not open file `{0}`'.format(filename)
-        }
-    else:
-        d = {
-            'success': not f.IsZombie(),
-            'data': {
-                'filename': filename,
-                'keys': [key.GetName() for key in f.GetListOfKeys()]
-            }
-        }
-    f.Close()
-    return jsonify(d)
+    return jsonify(tasks.list_file(tfile_path(filename)))
 
 @app.route('/files/<filename>/<key_name>')
-def get_file_key(filename, key_name):
+def get_key_from_file(filename, key_name):
     filename = add_file_extension(filename)
-    f = ROOT.TFile(tfile_path(filename))
-    if f.IsZombie():
-        return jsonify({
-            'success': False,
-            'message': 'Could not open file `{0}`'.format(filename)
-        })
-    obj = None
-    # This method, opposed to TFile.Get, is more robust against odd key names
-    for key in f.GetListOfKeys():
-        if key.GetName() == key_name:
-            obj = key.ReadObj()
-    if not obj:
-        d = {
-            'success': False,
-            'message': 'Could not find key `{0}` in file `{1}`'.format(filename, key_name)
-        }
-    else:
-        d = {
-            'success': True,
-            'data': {
-                'filename': filename,
-                'key_name': obj.GetName(),
-                'key_class': obj.ClassName(),
-                'key_data': data_for_object(obj)
-            }
-        }
-    f.Close()
-    return jsonify(d)
+    return jsonify(tasks.get_key_from_file(tfile_path(filename), key_name))
 
 if __name__ == '__main__':
     app.debug = True
