@@ -40,18 +40,4 @@ echo "export WORKON_HOME=$WORKON_HOME" >> .bashrc
 echo "source \$HOME/.local/bin/virtualenvwrapper.sh" >> .bashrc
 mkdir -p $WORKON_HOME
 
-echo "Installing rbenv and Ruby"
-git clone https://github.com/sstephenson/rbenv.git $HOME/.rbenv
-git clone https://github.com/sstephenson/ruby-build.git $HOME/.rbenv/plugins/ruby-build
-echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> $HOME/.bashrc
-echo 'eval "$(rbenv init -)"' >> $HOME/.bashrc
-source $HOME/.bash_profile
-rbenv install 1.9.3-p484
-rbenv global 1.9.3-p484
-# Don't install ri and rdoc documentation when installing gems
-echo "gem: --no-rdoc --no-ri" > $HOME/.gemrc
-
-echo "Installing Foreman"
-gem install foreman
-
 echo "User provisioning complete!"

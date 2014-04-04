@@ -37,13 +37,11 @@ echo "Installing required packages"
 #   vim and git
 #   OpenAFS
 #   ROOT dependencies
-#   Ruby dependencies
 #   XROOTD
 sudo $YUM install -y \
   vim git \
   kmod-openafs openafs openafs-client \
   libXpm \
-  zlib-devel \
   xrootd-client-devel xrootd-client xrootd-libs-devel xrootd-libs xrootd-server
 
 PREPFILE=$HOME/.preparation
