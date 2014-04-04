@@ -3,5 +3,6 @@ Jinja2==2.7.2
 MarkupSafe==0.18
 Werkzeug==0.9.4
 gunicorn==18.0
+honcho==0.5.0
 itsdangerous==0.23
 wsgiref==0.1.2
