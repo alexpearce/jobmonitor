@@ -6,6 +6,8 @@ var VELO = (function($, undefined) {
   var settings = {
     // Show `console.log` messages?
     debug: false,
+    // Default job status polling timeout in milliseconds
+    pollRate: 300,
     // Defaults for histogram drawing
     highchartsDefaults: {
       chart: {
@@ -119,7 +121,7 @@ var VELO = (function($, undefined) {
     // Draw the histogram in the container
     drawHistogram(container, {
       title: {
-          text: title
+        text: title
       },
       series: [
         {
@@ -154,12 +156,19 @@ var VELO = (function($, undefined) {
   //   container: jQuery element the histogram should be drawn in to. Any existing content will be replaced.
   var loadHistogramFromFileIntoContainer = function(histogram, file, container) {
     var url = '/files/' + file + '/' + histogram;
+    // Submit a job to retrieve the histogram data
     $.getJSON(url, function(data, status, jqXHR) {
       if (status === 'success' && data['success'] === true) {
-        // We can only handle TH1F objects at the moment
         var payload = data['data'];
-        if (payload['key_class'] !== 'TH1F') return;
-        displayHistogram(payload['key_data'], container);
+        // Start polling the job status, displaying the histogram on success
+        poll(payload['job_id'], function(result) {
+          // We can only handle TH1F objects at the moment
+          if (result['data']['key_class'] !== 'TH1F') return;
+          displayHistogram(result['data']['key_data'], container);
+        }, function(result) {
+          log('Failed to load histogram');
+          log(result);
+        });
       }
     }).fail(function() {
       container.html(''
@@ -172,6 +181,39 @@ var VELO = (function($, undefined) {
         + '</div>'
       );
     });
+  };
+
+  // Poll status of job, calling success or failure when finished.
+  // If the job is still running, `poll` is called again after `timeout`.
+  // Accepts:
+  //   jobID: String ID of the job to poll
+  //   success: Function called on successful job completion, passed the response
+  //   failure: Function called on failed job completion, passed the response
+  //   timeout: Integer number of milliseconds to wait before calling poll again, if the job has not finished (default: VELO.settings.pollRate)
+  var poll = function(jobID, success, failure, timeout) {
+    if (timeout === undefined) {
+      timeout = settings.pollRate;
+    }
+    setTimeout(function() {
+      $.getJSON('/fetch/' + jobID, function(data, stat, jqXHR) {
+        log('Polling jobID=' + jobID);
+        if (stat === 'success' && data['success'] === true) {
+          var payload = data['data'],
+              jobStatus = payload['status'],
+              result = payload['result'];
+          if (jobStatus === 'finished') {
+            log('Job ' + jobID + ' finished');
+            success(result);
+          } else if (jobStatus === 'failed') {
+            log('Job ' + jobID + ' failed');
+            failure(result);
+          } else {
+            log('Polling job ID ' + jobID + ': ' + jobStatus);
+            poll(jobID, success, failure, timeout);
+          }
+        }
+      });
+    }, timeout);
   };
 
   // Add a `Spinner` object to the `element`, using `settings.spinnerDefaults` as options.

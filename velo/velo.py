@@ -17,6 +17,9 @@ from flask import (
 )
 # So we can catch Jinja2 exception
 from jinja2.exceptions import TemplateNotFound
+# Job queues
+from rq import Queue
+from start_worker import conn
 
 # ROOT tasks
 import tasks
@@ -31,6 +34,7 @@ app.config['DEFAULT_CHILDREN'] = {
     'velo_view': 'velo_view/overview',
     'velo_view/trends': 'velo_view/trends/nzs'
 }
+queue = Queue(connection=conn)
 
 def add_file_extension(filename):
     """Add `.root` extension to `filename`, if it's not already present."""
@@ -58,6 +62,20 @@ def default_child_path(path):
         child_path = path
     return child_path
 
+def enqueue(f, *args, **kwargs):
+    """Submit `f` to the queue, returning a response-ready dictionary.
+
+    All *args and **kwargs are passed directly to rq.Queue.enqueue.
+    """
+    job = queue.enqueue(f, *args, **kwargs)
+    return {
+        'success': True,
+        'data': {
+            'status': 'submitted',
+            'job_id': job.get_id()
+        }
+    }
+
 # Root URL shows VELO view
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
@@ -81,6 +99,34 @@ def page_not_found(e):
 def assets(filename):
     return send_from_directory(app.config['ASSETS_DIRECTORY'], filename)
 
+# Polling API
+# Given a valid job ID, returns the job result if successful,
+# an error message if failed, or the status of the running job
+@app.route('/fetch/<job_id>')
+def fetch(job_id):
+    # Try to fetch the job
+    job = queue.safe_fetch_job(job_id)
+    # Error if we found nothing
+    if job is None:
+        d = {
+            'success': False,
+            'message': 'Could not find job with ID `{0}`'.format(job_id)
+        }
+    else:
+        status = job.status
+        d = {
+            'success': True,
+            'data': {
+                'status': status,
+                'job_id': job.get_id()
+            }
+        }
+        # If the job's complete, append the result (could not None)
+        if job.is_finished:
+            d['data']['result'] = job.result
+    return jsonify(d)
+
+
 # Files API
 # The Files API defines the endpoints for retrieving and querying TFiles and their contents.
 @app.route('/files/<filename>')
@@ -96,12 +142,14 @@ def get_file(filename):
 @app.route('/files/<filename>/list')
 def list_file(filename):
     filename = add_file_extension(filename)
-    return jsonify(tasks.list_file(tfile_path(filename)))
+    resp = enqueue(tasks.list_file, tfile_path(filename))
+    return jsonify(resp)
 
 @app.route('/files/<filename>/<key_name>')
 def get_key_from_file(filename, key_name):
     filename = add_file_extension(filename)
-    return jsonify(tasks.get_key_from_file(tfile_path(filename), key_name))
+    resp = enqueue(tasks.get_key_from_file, tfile_path(filename), key_name)
+    return jsonify(resp)
 
 if __name__ == '__main__':
     app.debug = True
