@@ -58,11 +58,32 @@ else
   echo "Resuming provisioning"
 fi
 
+# Download, compile, and install the Redis server and CLI
+echo "Installing Redis"
+curl -O http://download.redis.io/redis-stable.tar.gz
+tar xvzf redis-stable.tar.gz
+cd redis-stable
+make
+sudo cp src/redis-server src/redis-cli /usr/local/bin
+# Provide default configuration
+sudo mkdir -p /usr/local/etc
+sudo cp redis.conf /usr/local/etc
+cd -
+rm -rf redis-stable
+rm redis-stable.tar.gz
+# Enable memory overcommit
+# http://redis.io/topics/admin
+sudo cat >> /etc/sysctl.conf << EOF
+
+vm.overcommit_memory = 1
+EOF
+
 echo "Configuring AFS"
 echo "cern.ch" > $HOME/ThisCell
 sudo mv $HOME/ThisCell /usr/vice/etc/ThisCell
 sudo /sbin/chkconfig --add afs
-sudo /sbin/service afs on
+sudo /sbin/chkconfig afs on
+sudo /sbin/service afs start
 
 # Run the user provision as the vagrant user
 su vagrant -c '/vagrant/user_provisioning.sh'

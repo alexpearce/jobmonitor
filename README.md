@@ -36,3 +36,8 @@ and then start the server
     honcho start
 
 Then [visit the site](http://localhost:5000/) on your development machine.
+
+By default the `honcho start` command spawns one worker process.
+To start multiple workers, say 4, do
+
+    honcho start -c worker=4
