@@ -64,7 +64,7 @@ echo "Configuring AFS"
 echo "cern.ch" > $HOME/ThisCell
 sudo mv $HOME/ThisCell /usr/vice/etc/ThisCell
 sudo /sbin/chkconfig --add afs
-sudo /sbin/service afs start
+sudo /sbin/service afs on
 
 # Run the user provision as the vagrant user
 su vagrant -c '/vagrant/user_provisioning.sh'
