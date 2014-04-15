@@ -1,17 +1,17 @@
 {#
   Return a stylesheet link tag.
-  If asset, construct URL as `assets/stylesheets/name.css`, else assume URL is name.
+  If asset, construct URL as `static/stylesheets/name.css`, else assume URL is name.
 #}
 {% macro stylesheet_tag(name, asset=True) %}
-  <link rel="stylesheet" href="{{ url_for('assets', filename='stylesheets/{0}.css'.format(name)) if asset else name }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/{0}.css'.format(name)) if asset else name }}">
 {% endmacro %}
 
 {#
   Return a JavaScript link tag.
-  If asset, construct URL as `assets/javascripts/name.js`, else assume URL is name.
+  If asset, construct URL as `static/javascripts/name.js`, else assume URL is name.
 #}
 {% macro javascript_tag(name, asset=True) %}
-  <script src="{{ url_for('assets', filename='javascripts/{0}.js'.format(name)) if asset else name }}"></script>
+  <script src="{{ url_for('static', filename='javascripts/{0}.js'.format(name)) if asset else name }}"></script>
 {% endmacro %}
 
 {#

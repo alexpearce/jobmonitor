@@ -26,7 +26,7 @@ import tasks
 
 # Define the app and its configuration
 app = Flask(__name__)
-app.config['ASSETS_DIRECTORY'] = './assets'
+app.config['ASSETS_DIRECTORY'] = './static'
 app.config['FILES_DIRECTORY'] = '{0}/files'.format(app.config['ASSETS_DIRECTORY'])
 # Define mapping of parent path to its default child
 app.config['DEFAULT_CHILDREN'] = {
@@ -92,12 +92,8 @@ def serve_page(path):
 
 @app.errorhandler(404)
 def page_not_found(e):
+    g.active_page = '404'
     return render_template('errors/404.html'), 404
-
-# Assets API
-@app.route('/assets/<path:filename>')
-def assets(filename):
-    return send_from_directory(app.config['ASSETS_DIRECTORY'], filename)
 
 # Polling API
 # Given a valid job ID, returns the job result if successful,
