@@ -18,4 +18,4 @@ cd /vagrant/velo
 pip install -r requirements.txt
 echo "virtualenv setup complete!"
 echo "Now start the server with"
-echo "  foreman start"
+echo "  honcho start"
