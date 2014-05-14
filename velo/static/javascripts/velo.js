@@ -9,36 +9,7 @@ var VELO = (function($, undefined) {
     // Default job status polling timeout in milliseconds
     pollRate: 300,
     // Defaults for histogram drawing
-    highchartsDefaults: {
-      chart: {
-        zoomType: 'x'
-      },
-      legend: {
-        enabled: false
-      },
-      xAxis: {
-        gridLineWidth: 1,
-        minorTickInterval: 'auto'
-      },
-      yAxis: {
-        gridLineWidth: 1,
-        minorTickInterval: 'auto'
-      },
-      plotOptions: {
-        series: {
-          // Disable initialisation animation
-          animation: false
-        },
-        column: {
-          groupPadding: 0,
-          pointPadding: 0,
-          borderWidth: 0
-        },
-        errorbar: {}
-      },
-      credits: {
-        enabled: false
-      }
+    histogramDefaults: {
     },
     // See http://fgnass.github.io/spin.js/ for options and customisation
     spinnerDefaults: {
@@ -79,13 +50,22 @@ var VELO = (function($, undefined) {
   // Draw a histogram in the `container` using `options`.
   // Accepts:
   //   container: A jQuery object in which to draw the histogram
+  //     If the jQuery object references multiple DOM nodes, the first is used
+  //   data: An array of data points formatted for d3.chart.histogram
   //   options: Object of options passed to the plotting library
+  //     Any present options override those in VELO.settings.histogramDefaults
   // Returns:
   //   undefined
-  var drawHistogram = function(container, options) {
-    // Create a new object as the merge of the default options and those in the argument.
-    // Properties in options will overrides the defaults.
-    container.highcharts($.extend(true, {}, VELO.settings.highchartsDefaults, options));
+  var drawHistogram = function(container, data, options) {
+    var opt = $.extend(true, {}, VELO.settings.histogramDefaults, options);
+    console.log(container.width(), container.height());
+    d3.select(container.get()[0]).append('svg')
+      .attr('width', container.width())
+      .attr('height', container.height())
+      .chart('HistogramZoom')
+      .xAxisLabel(opt.xAxis.title.text)
+      .yAxisLabel(opt.yAxis.title.text)
+      .draw(data);
   };
 
   // Display a histogram, described by `data`, in `container`.
@@ -100,42 +80,24 @@ var VELO = (function($, undefined) {
         binning = data['binning'],
         values = data['values'],
         uncertainties = data['uncertainties'],
-        axisTitles = data['axis_titles'],
-        points = [],
-        errors = [];
+        axisTitles = data['axis_titles'];
     var v, binCenter, uLow, uHigh;
-    // We need to manipulate the values slightly for Highcharts
-    // 'Histogram' columns are defined by their x-axis bin centers
-    // and their y-axis columns heights
-    // We define the bin center as the average of the bin boundaries,
-    // and the column height as the bin contents
-    // Uncertainties need an x-value, the bin center, and (low, high) y-values
+    // We need to manipulate the values slightly for d3.chart.histogram
+    // See the d3.chart.histogram documentation for the specifics
+    var formattedData = [];
     for (var i = 0; i < values.length; i++) {
-      v = values[i];
-      uLow = v - uncertainties[i][0];
-      uHigh = v + uncertainties[i][1];
-      binCenter = (binning[i][0] + binning[i][1])/2.0;
-      points.push([binCenter, v]);
-      errors.push([binCenter, uLow, uHigh]);
+      var bins = binning[i];
+      formattedData.push({
+        x: bins[0],
+        dx: bins[1],
+        y: data['values'][i],
+        xErr: uncertainties[i]
+      });
     }
-    // Draw the histogram in the container
-    drawHistogram(container, {
+    var options = {
       title: {
         text: title
       },
-      series: [
-        {
-          name: 'Data',
-          type: 'column',
-          data: points,
-          color: '#ccc'
-        },
-        {
-          name: 'Data error',
-          type: 'errorbar',
-          data: errors
-        }
-      ],
       xAxis: {
         title: {
           text: axisTitles[0]
@@ -145,8 +107,12 @@ var VELO = (function($, undefined) {
         title: {
           text: axisTitles[1]
         }
-      }
-    });
+      },
+    };
+    // Remove the spinner
+    container.find('.spinner').remove();
+    // Draw the histogram in the container
+    drawHistogram(container, formattedData, options);
   };
 
   // Fetches and draws the named `histogram`, residing in `file`, in to the `container`.

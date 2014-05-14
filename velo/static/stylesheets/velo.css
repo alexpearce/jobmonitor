@@ -64,6 +64,81 @@ body {
   margin-bottom: 10px;
 }
 
+/* Histogram line areas */
+.line {
+  shape-rendering: crispEdges;
+}
+
+/* Points */
+.data-point {
+  fill: #000;
+}
+
+/* Error bars */
+.data-error {
+  stroke-width: 1px;
+  stroke: #000;
+}
+
+/* Axes */
+path.domain {
+  fill: none;
+  stroke: #000;
+  stroke-width: 1px;
+  shape-rendering: crispEdges;
+}
+
+.axis .tick line {
+  stroke: #000;
+  stroke-width: 1px;
+  shape-rendering: crispEdges;
+}
+
+.axis text {
+  fill: #222;
+}
+
+.grid {
+  fill: none;
+  stroke: #e0e0e0;
+  shape-rendering: crispEdges;
+}
+
+.axis-label {
+  font-size: 0.9em;
+}
+
+/* Brush, i.e. zoom box */
+.brush .extent {
+  fill: #000;
+  fill-opacity: 0.125;
+  stroke: #000;
+  stroke-opacity: 0.2;
+  stroke-width: 1px;
+  shape-rendering: crispEdges;
+}
+
+/* 'Clear zoom' text */
+.clear-button {
+  cursor: pointer;
+}
+
+.clear-button rect {
+  fill: #eee;
+  stroke: #000;
+  stroke-width: 1px;
+  stroke-opacity: 0.125;
+  border-radius: 2px;
+}
+
+.clear-button:hover rect {
+  fill: #e4e4e4;
+}
+
+.clear-button:active rect {
+  fill: #ddd;
+}
+
 @media (min-width: 768px) {
   body {
     /* Move down content to compensate for fixed nav bar */
