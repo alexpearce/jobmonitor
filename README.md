@@ -1,8 +1,15 @@
-Vagrant + Honcho + Gunicorn + Flask
-====================================
+ROOT web monitoring
+===================
 
-These files are all that's needed to create an [SLC6](https://www.scientificlinux.org/) development environment with [Vagrant](http://www.vagrantup.com/).
-There are three classes of file:
+A [Flask](http://flask.pocoo.org/) web application to view [ROOT](http://root.cern.ch/) histograms.
+
+
+Setting the development environment
+-----------------------------------
+
+Development is done on an [SLC6](https://www.scientificlinux.org/) virtual machine managed with [Vagrant](http://www.vagrantup.com/).
+
+There are three important groups of file for setting up the machine:
 
 1. The `Vagrantfile` specifies how to create and provision the virtual machine (VM)
 2. The `*_provision.sh` files define the provisioning which sets up the VM
