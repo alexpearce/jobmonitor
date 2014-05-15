@@ -1,13 +1,7 @@
-{% extends "velo_view/velo_view.html" %}
-{% block pageheader %}Trends{% endblock %}
+{% extends "examples/examples.html" %}
+{% block pageheader %}Grid layout{% endblock %}
 {% block body %}
-  <ul class="nav nav-tabs nav-justified">
-    {{ list_link_tag('velo_view/trends/nzs', 'NZS') }}
-    {{ list_link_tag('velo_view/trends/clusters', 'Clusters') }}
-    {{ list_link_tag('velo_view/trends/tracks', 'Tracks') }}
-    {{ list_link_tag('velo_view/trends/vertices', 'Vertices') }}
-  </ul>
-  {% include "velo_view/trends/_run_range_form.html" %}
+  {% include "examples/_run_range_form.html" %}
   <div class="trend-indicators">
     <div class="row">
       <div class="col-sm-2">
@@ -52,8 +46,18 @@
     </div>
   </div>
   <hr>
-  {% block childbody %}
-  {% endblock %}
+  <div class="row">
+    <div class="col-sm-6 histogram" data-file="histograms.root" data-histogram="histogram_0">
+    </div>
+    <div class="col-sm-6 histogram" data-file="histograms" data-histogram="histogram_1">
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-6 histogram" data-file="histograms" data-histogram="histogram_2">
+    </div>
+    <div class="col-sm-6 histogram" data-file="histograms" data-histogram="histogram_3">
+    </div>
+  </div>
   <div class="trends-vs-selector">
     <div class="btn-group">
       <button type="button" class="btn btn-default disabled" disabled>Trend vs.</button>
