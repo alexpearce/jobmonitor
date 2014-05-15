@@ -24,16 +24,9 @@ from start_worker import conn
 # ROOT tasks
 import tasks
 
-# Define the app and its configuration
+# Define the app and load its configuration from config.py
 app = Flask(__name__)
-app.config['ASSETS_DIRECTORY'] = './static'
-app.config['FILES_DIRECTORY'] = '{0}/files'.format(app.config['ASSETS_DIRECTORY'])
-# Define mapping of parent path to its default child
-app.config['DEFAULT_CHILDREN'] = {
-    '': 'velo_view',
-    'velo_view': 'velo_view/overview',
-    'velo_view/trends': 'velo_view/trends/nzs'
-}
+app.config.from_object('config')
 queue = Queue(connection=conn)
 
 def add_file_extension(filename):
@@ -76,7 +69,6 @@ def enqueue(f, *args, **kwargs):
         }
     }
 
-# Root URL shows VELO view
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def serve_page(path):

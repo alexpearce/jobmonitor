@@ -13,7 +13,7 @@ There are three important groups of file for setting up the machine:
 
 1. The `Vagrantfile` specifies how to create and provision the virtual machine (VM)
 2. The `*_provision.sh` files define the provisioning which sets up the VM
-3. `setup_velo.sh` is application-specific configuration for running a [Flask](http://flask.pocoo.org/) app, served by [Gunicorn](http://gunicorn.org/), with [Honcho](https://github.com/nickstenning/honcho), a [Foreman](https://github.com/ddollar/foreman) clone, managing the processes.
+3. `setup_webmonitor.sh` is application-specific configuration for running a [Flask](http://flask.pocoo.org/) app, served by [Gunicorn](http://gunicorn.org/), with [Honcho](https://github.com/nickstenning/honcho), a [Foreman](https://github.com/ddollar/foreman) clone, managing the processes.
 
 To initialise the virtual machine, install [VirtualBox](https://www.virtualbox.org/) and [Vagrant](http://docs.vagrantup.com/v2/installation/index.html) and then, inside this directory, run
 
@@ -25,21 +25,21 @@ and then when prompted to reload, do so with
 
 Both of these steps can take some time, upwards of ten minutes.
 
-If you then want to run the VELO web application, SSH into the VM
+If you then want to run the monitoring application, SSH into the VM
 
     vagrant ssh
 
-and run the `setup_velo.sh` script
+and run the `setup_webmonitor.sh` script
 
-    /vagrant/setup_velo.sh
+    /vagrant/setup_webmonitor.sh
 
-When resuming development, you will need to activate the VELO [virtualenv](http://www.virtualenv.org/), in the VM, to load the appropriate packages 
+When resuming development, you will need to activate the [virtualenv](http://www.virtualenv.org/), in the VM, to load the appropriate packages 
 
-    workon velo
+    workon webmonitor
 
 and then start the server
 
-    cd /vagrant/velo
+    cd /vagrant/webmonitor
     honcho start
 
 Then [visit the site](http://localhost:5000/) on your development machine.

@@ -29,11 +29,11 @@ body {
   margin-top: 0;
 }
 
-.velo-overview-table td, .velo-overview-table th {
+.overview-table td, .overview-table th {
   text-align: center;
 }
 
-.velo-overview-table td:last-child {
+.overview-table td:last-child {
   text-align: left;
 }
 

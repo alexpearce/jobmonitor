@@ -1,6 +1,6 @@
 // For more information on the 'revealing module' pattern, see
 //   http://addyosmani.com/resources/essentialjsdesignpatterns/book/#modulepatternjavascript
-var VELO = (function($, undefined) {
+var WebMonitor = (function($, undefined) {
   'use strict';
 
   var settings = {
@@ -53,11 +53,11 @@ var VELO = (function($, undefined) {
   //     If the jQuery object references multiple DOM nodes, the first is used
   //   data: An array of data points formatted for d3.chart.histogram
   //   options: Object of options passed to the plotting library
-  //     Any present options override those in VELO.settings.histogramDefaults
+  //     Any present options override those in WebMonitor.settings.histogramDefaults
   // Returns:
   //   undefined
   var drawHistogram = function(container, data, options) {
-    var opt = $.extend(true, {}, VELO.settings.histogramDefaults, options);
+    var opt = $.extend(true, {}, WebMonitor.settings.histogramDefaults, options);
     console.log(container.width(), container.height());
     d3.select(container.get()[0]).append('svg')
       .attr('width', container.width())
@@ -155,7 +155,7 @@ var VELO = (function($, undefined) {
   //   jobID: String ID of the job to poll
   //   success: Function called on successful job completion, passed the response
   //   failure: Function called on failed job completion, passed the response
-  //   timeout: Integer number of milliseconds to wait before calling poll again, if the job has not finished (default: VELO.settings.pollRate)
+  //   timeout: Integer number of milliseconds to wait before calling poll again, if the job has not finished (default: WebMonitor.settings.pollRate)
   var poll = function(jobID, success, failure, timeout) {
     if (timeout === undefined) {
       timeout = settings.pollRate;
@@ -193,25 +193,30 @@ var VELO = (function($, undefined) {
 
   // Page-specific modules
   var pages = {
-    veloView: {
+    examples: {
       init: function() {
-        log('veloView.init');
+        log('examples.init');
       },
-      overview: {
+      table: {
         init: function() {
-          log('veloView.overview.init');
+          log('examples.table.init');
         }
       },
-      trends: {
-        init: function () {
-          log('veloView.trends.init');
+      singeLayout: {
+        init: function() {
+          log('examples.singleLayout.init');
         }
       },
-      detailedTrends: {
-        init: function () {
-          log('veloView.detailedTrends.init');
+      gridLayout: {
+        init: function() {
+          log('examples.gridLayout.init');
         }
-      }
+      },
+      tabs: {
+        init: function() {
+          log('examples.tabs.init');
+        }
+      },
     }
   };
 
@@ -258,7 +263,7 @@ var VELO = (function($, undefined) {
 })(jQuery);
 
 $(function() {
-  VELO.settings.debug = true;
+  WebMonitor.settings.debug = true;
   // Away we go!
-  VELO.init(activePage);
+  WebMonitor.init(activePage);
 });
