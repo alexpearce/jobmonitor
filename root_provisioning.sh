@@ -7,7 +7,7 @@
 # Updates the VM, installs ROOT and Ruby dependencies, and then,
 # after a reboot, configures AFS and runs the user provisions.
 #
-# Initialise the VM with provisioning
+# Initialise the VM with provisioning
 #   vagrant up --provision
 # Reload the VM when prompted, provisioning a final time
 #   vagrant reload --provision
@@ -71,8 +71,8 @@ sudo cp redis.conf /usr/local/etc
 cd -
 rm -rf redis-stable
 rm redis-stable.tar.gz
-# Enable memory overcommit
-# http://redis.io/topics/admin
+# Enable memory overcommit
+# http://redis.io/topics/admin
 sudo cat >> /etc/sysctl.conf << EOF
 
 vm.overcommit_memory = 1
@@ -85,7 +85,7 @@ sudo /sbin/chkconfig --add afs
 sudo /sbin/chkconfig afs on
 sudo /sbin/service afs start
 
-# Run the user provision as the vagrant user
+# Run the user provision as the vagrant user
 su vagrant -c '/vagrant/user_provisioning.sh'
 
 echo "Provisioning complete!"
