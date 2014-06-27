@@ -1,7 +1,5 @@
 # Flask API: http://flask.pocoo.org/docs/api/
 from flask import (
-    # Creating app instances
-    Flask,
     # Rendering Jinja2 templates
     render_template,
     # Serving assets
@@ -17,17 +15,17 @@ from flask import (
 )
 # So we can catch Jinja2 exception
 from jinja2.exceptions import TemplateNotFound
+
 # Job queues
 from rq import Queue
 from start_worker import conn
+queue = Queue(connection=conn)
 
 # ROOT tasks
 import tasks
 
-# Define the app and load its configuration from config.py
-app = Flask(__name__)
-app.config.from_object('config')
-queue = Queue(connection=conn)
+# The application
+from webmonitor import app
 
 def add_file_extension(filename):
     """Add `.root` extension to `filename`, if it's not already present."""
