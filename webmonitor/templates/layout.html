@@ -1,3 +1,15 @@
+{#
+  Main layout template for the application.
+  Defines the overall HTML framework, and includes WebMonitor stylesheets and javascripts.
+  Extending templates have access to the following blocks:
+
+  * `stylesheets` - Extra stylesheets <link> tags in the header, after all WebMonitor stylesheets
+  * `navbartop` - Top navigation bar
+  * `maincontent` - Main content body below the navigation bar
+  * `javascripts`  Extra javascripts just before the closing <body> tag, after all WebMonitor javascripts
+
+  They also have access to the helpers defined in _helpers.html, as this templates includes that file.
+#}
 {% from "_helpers.html" import stylesheet_tag, javascript_tag, list_link_tag %}
 <!doctype html>
 <html lang="en">
@@ -17,6 +29,7 @@
   {{ stylesheet_tag('//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css', False) }}
   {{ stylesheet_tag('bootstrap-datepicker') }}
   {{ stylesheet_tag('webmonitor') }}
+  {% block stylesheets %}{% endblock %}
 </head>
 <body>
   <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -38,15 +51,7 @@
     </div>
   </div>
   <div class="container-fluid">
-    <div class="row">
-      <sidebar class="col-sm-3 col-md-2 sidebar">
-        <ul class="nav nav-sidebar">{% block navsidebar %}{% endblock %}</ul>
-      </sidebar>
-      <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" id="main">
-      <h1 class="page-header">{% block pageheader %}{% endblock %}</h1>
-      {% block body %}{% endblock %}
-      </div>
-    </div>
+    {% block maincontainer %}{% endblock %}
   </div>
   <!-- jQuery for AJAX calls and DOM manipulation. -->
   {{ javascript_tag('//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js', False) }}
@@ -72,5 +77,6 @@
       return char.toUpperCase();
     });
   </script>
+  {% block javascripts %}{% endblock %}
 </body>
 </html>
