@@ -39,7 +39,7 @@ When resuming development, you will need to activate the [virtualenv](http://www
 
 and then start the server
 
-    cd /vagrant/webmonitor
+    cd /vagrant
     honcho start
 
 Then [visit the site](http://localhost:5000/) on your development machine.
