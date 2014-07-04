@@ -1,5 +1,17 @@
 import ROOT
 
+from webmonitor import app
+
+def add_file_extension(filename):
+    """Add `.root` extension to `filename`, if it's not already present."""
+    return (filename + '.root') if filename[-5:] != '.root' else filename
+
+
+def tfile_path(filename):
+    """Return the path to the TFile with `filename`."""
+    return '{0}/{1}'.format(app.config['FILES_DIRECTORY'], filename)
+
+
 def data_for_object(obj):
     """Return a dictionary representing the data inside the object."""
     obj_class = obj.ClassName()
@@ -58,6 +70,7 @@ def get_key_from_file(filename, key_name):
     filename -- Name of file with full path, e.g. `/a/b/my_file.root`
     key_name -- Name of key object is stored as
     """
+    filename = tfile_path(add_file_extension(filename))
     f = ROOT.TFile(filename)
     if f.IsZombie():
         return jsonify({

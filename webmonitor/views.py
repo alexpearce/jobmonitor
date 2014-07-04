@@ -1,15 +1,17 @@
 # Flask API: http://flask.pocoo.org/docs/api/
 from flask import (
+    # The request context
+    request,
     # Rendering Jinja2 templates
     render_template,
-    # Serving assets
-    send_from_directory,
     # Serving custom filetypes
     send_file,
     # JSON encode Python dictionaries
     jsonify,
     # Set and access variables global to the app instance and views
     g,
+    # Generate URLs
+    url_for,
     # Raise HTTP error code exceptions
     abort
 )
@@ -26,14 +28,6 @@ import tasks
 
 # The application
 from webmonitor import app
-
-def add_file_extension(filename):
-    """Add `.root` extension to `filename`, if it's not already present."""
-    return (filename + '.root') if filename[-5:] != '.root' else filename
-
-def tfile_path(filename):
-    """Return the path to the TFile with `filename`."""
-    return '{0}/{1}'.format(app.config['FILES_DIRECTORY'], filename)
 
 def default_child_path(path):
     """Return the default child of the parent path, if it exists, else return path.
@@ -53,19 +47,6 @@ def default_child_path(path):
         child_path = path
     return child_path
 
-def enqueue(f, *args, **kwargs):
-    """Submit `f` to the queue, returning a response-ready dictionary.
-
-    All *args and **kwargs are passed directly to rq.Queue.enqueue.
-    """
-    job = queue.enqueue(f, *args, **kwargs)
-    return {
-        'success': True,
-        'data': {
-            'status': 'submitted',
-            'job_id': job.get_id()
-        }
-    }
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
@@ -80,62 +61,71 @@ def serve_page(path):
     except TemplateNotFound:
         abort(404)
 
+
+# TODO should respond with JSON when 404'ing from the jobs API
 @app.errorhandler(404)
 def page_not_found(e):
     g.active_page = '404'
     return render_template('errors/404.html'), 404
 
-# Polling API
-# Given a valid job ID, returns the job result if successful,
-# an error message if failed, or the status of the running job
-@app.route('/fetch/<job_id>')
-def fetch(job_id):
-    # Try to fetch the job
-    job = queue.safe_fetch_job(job_id)
-    # Error if we found nothing
-    if job is None:
-        d = {
-            'success': False,
-            'message': 'Could not find job with ID `{0}`'.format(job_id)
-        }
-    else:
-        status = job.status
-        d = {
-            'success': True,
-            'data': {
-                'status': status,
-                'job_id': job.get_id()
-            }
-        }
-        # If the job's complete, append the result (could not None)
-        if job.is_finished:
-            d['data']['result'] = job.result
-    return jsonify(d)
 
+# Jobs API
+# TODO finalise response format, i.e. what metadata we send with each response
+##########
 
-# Files API
-# The Files API defines the endpoints for retrieving and querying TFiles and their contents.
-@app.route('/files/<filename>')
-def get_file(filename):
-    filename = add_file_extension(filename)
-    return send_file(
-        tfile_path(filename),
-        mimetype='application/octet-stream',
-        as_attachment=True,
-        attachment_filename=filename
+def serialize_job(job):
+    """Return a dictionary representing the job."""
+    d = dict(
+        id=job.get_id(),
+        uri=url_for('get_job', job_id=job.get_id(), _external=True),
+        status=job.status,
+        result=job.result
     )
+    return d
 
-@app.route('/files/<filename>/list')
-def list_file(filename):
-    filename = add_file_extension(filename)
-    resp = enqueue(tasks.list_file, tfile_path(filename))
-    return jsonify(resp)
 
-@app.route('/files/<filename>/<key_name>')
-def get_key_from_file(filename, key_name):
-    filename = add_file_extension(filename)
-    resp = enqueue(tasks.get_key_from_file, tfile_path(filename), key_name)
-    return jsonify(resp)
+@app.route('/jobs', methods=['GET'])
+def get_jobs():
+    jobs = [serialize_job(j) for j in queue.get_jobs()]
+    return jsonify({'jobs': jobs})
+
+
+@app.route('/jobs', methods=['POST'])
+def create_job():
+    data = request.get_json()
+    # Only handle JSON requests
+    # TODO when Flask 0.11 is released, use request.is_json instead
+    if not data:
+        abort(400)
+    # Try read the task name and load the task, returning a 400 error on fail
+    try:
+        task_name = data['task_name']
+    except KeyError:
+        return jsonify(dict(
+            message='No task name provided'
+        )), 400
+    try:
+        # TODO how can this be made extensible by derivative apps?
+        # Maybe webmonitor.add_tasks(...), then we look in a list/dict here?
+        task = getattr(tasks, task_name)
+    except AttributeError:
+        return jsonify(dict(
+            message='Invalid task name `{0}`'.format(task_name)
+        )), 400
+    # Enqueue the task, passing empty arguments if none were provided
+    args = data.get('args', {})
+    job = queue.enqueue(task, **args)
+    return jsonify(dict(job=serialize_job(job))), 201
+
+
+@app.route('/jobs/<job_id>', methods=['GET'])
+def get_job(job_id):
+    # Try to fetch the job, 404'ing if it's not found
+    job = queue.safe_fetch_job(job_id)
+    if job is None:
+        abort(404)
+    return jsonify(dict(job=serialize_job(job)))
+
 
 if __name__ == '__main__':
     app.debug = True
