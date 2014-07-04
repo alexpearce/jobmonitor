@@ -19,7 +19,10 @@ urlparse.uses_netloc.append('redis')
 url = urlparse.urlparse(redis_url)
 conn = Redis(host=url.hostname, port=url.port, db=0, password=url.password)
 
-if __name__ == '__main__':
+def work():
     with Connection(conn):
         worker = Worker(map(Queue, listen))
         worker.work()
+
+if __name__ == '__main__':
+    work()
