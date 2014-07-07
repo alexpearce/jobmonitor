@@ -13,6 +13,7 @@ from flask import (
 
 # Job queues
 from rq import Queue
+from rq.exceptions import NoSuchJobError
 from start_worker import conn
 queue = Queue(connection=conn)
 
@@ -66,7 +67,8 @@ def create_job():
 @jobs.route('/jobs/<job_id>', methods=['GET'])
 def get_job(job_id):
     # Try to fetch the job, 404'ing if it's not found
-    job = queue.safe_fetch_job(job_id)
-    if job is None:
+    try:
+        job = queue.fetch_job(job_id)
+    except NoSuchJobError:
         abort(404)
     return jsonify(dict(job=serialize_job(job)))
