@@ -1,0 +1,2 @@
+recursive-include webmonitor/templates *
+recursive-include webmonitor/static *
