@@ -21,7 +21,7 @@
 #}
 {% macro list_link_tag(page, title) %}
   <li class="{{ 'active' if active_page_or_ancestor(page) else '' }}">
-    <a href="{{ url_for('serve_page', path=page) }}">{{ title }}</a>
+    <a href="{{ url_for('catchall.serve_page', path=page) }}">{{ title }}</a>
   </li>
 {% endmacro %}
 

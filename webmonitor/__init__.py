@@ -3,8 +3,15 @@ from flask import (
     Flask
 )
 
-# Define the app and load its configuration from config.py
-app = Flask(__name__)
-app.config.from_object('webmonitor.config')
+def create_app():
+    # Define the app and load its configuration from config.py
+    app = Flask(__name__)
+    app.config.from_object('webmonitor.config')
 
-from webmonitor import views
+    # Add jobs API and generic views
+    from catchall import catchall
+    from jobs import jobs
+    app.register_blueprint(catchall)
+    app.register_blueprint(jobs)
+
+    return app
