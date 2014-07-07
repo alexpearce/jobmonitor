@@ -15,6 +15,7 @@ setup(name='webmonitor',
     license=read('LICENSE'),
     long_description=read('README.md'),
     packages=['webmonitor'],
+    include_package_data = True,
     install_requires=[
         'Flask>=0.10.1',
         'rq>=0.3.13',
