@@ -324,6 +324,7 @@ var WebMonitor = (function($, undefined) {
     init: init,
     submitJob: submitJob,
     createTask: createTask,
+    log: log,
     settings: settings
   };
 })(jQuery);
