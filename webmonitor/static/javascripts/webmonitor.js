@@ -255,41 +255,26 @@ var WebMonitor = (function($, undefined) {
     return new Spinner(settings.spinnerDefaults).spin(element);
   }
 
-  // Page-specific modules
-  var pages = {
-    examples: {
-      init: function() {
-        log('examples.init');
-      },
-      table: {
-        init: function() {
-          log('examples.table.init');
-        }
-      },
-      singeLayout: {
-        init: function() {
-          log('examples.singleLayout.init');
-        }
-      },
-      gridLayout: {
-        init: function() {
-          log('examples.gridLayout.init');
-        }
-      },
-      tabs: {
-        init: function() {
-          log('examples.tabs.init');
-        }
-      },
-    }
-  };
-
   // Initialise globally required features, and call the chain of inits required for pageModule.
   // Accepts:
   //   pageModule: String of the form `x.y.z`. Starting from the top (`x`), the `init` function on each module is called, if it exists.
+  //   pages: Object of page-specific objects. The `init` function of each page-specific object is called if its hierarchical position within
+  //          `pages` matches a subsection of `pageModule`. For example, given a `pages` object like
+  //            {
+  //              home: {
+  //                init: function() { ... }
+  //              },
+  //              example: {
+  //                init: { function() {... },
+  //                foo:  { init: function() { ... }},
+  //                bar:  { init: function() { ... }}
+  //              }
+  //            }
+  //          a `pageModule` of `home` would call `home.init`, whereas a `pageModule` of `example.foo` would fire *both* `example.init`
+  //          and `example.foo.init`.
   // Returns:
   //   undefined
-  var init = function(pageModule) {
+  var init = function(pageModule, pages) {
     var components = pageModule.split('/'),
         parentModule = pages,
         modules = [],
@@ -328,9 +313,3 @@ var WebMonitor = (function($, undefined) {
     settings: settings
   };
 })(jQuery);
-
-$(function() {
-  WebMonitor.settings.debug = true;
-  // Away we go!
-  WebMonitor.init(activePage);
-});
