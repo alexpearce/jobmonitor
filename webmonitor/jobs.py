@@ -24,7 +24,7 @@ def serialize_job(job):
     d = dict(
         id=job.get_id(),
         uri=url_for('jobs.get_job', job_id=job.get_id(), _external=True),
-        status=job.status,
+        status=job.get_status(),
         result=job.result
     )
     return d
