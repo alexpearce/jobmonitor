@@ -67,8 +67,15 @@ def create_job():
 @jobs.route('/jobs/<job_id>', methods=['GET'])
 def get_job(job_id):
     # Try to fetch the job, 404'ing if it's not found
-    try:
-        job = queue.fetch_job(job_id)
-    except NoSuchJobError:
+    job = queue.fetch_job(job_id)
+    if job is None:
         abort(404)
     return jsonify(dict(job=serialize_job(job)))
+
+@jobs.errorhandler(400)
+def bad_request(e):
+    return jsonify(dict(message='Bad request')), 400
+
+@jobs.errorhandler(404)
+def bad_request(e):
+    return jsonify(dict(message='Resource not found')), 404
