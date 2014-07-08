@@ -1,20 +1,23 @@
 import unittest
+import mock
 import json
 import flask
+import rq
+# import redis, fakeredis, rq
+# import fakeredis, rq
 import webmonitor
-
-from rq import Queue
-import webmonitor.start_worker
 
 def add(a, b):
     """Task to put on the queue."""
     return a + b
 
 class WebMonitorTest(unittest.TestCase):
+    # @mock.patch('redis.Redis', fakeredis.FakeRedis)
+    # @mock.patch('redis.StrictRedis', fakeredis.FakeStrictRedis)
     def setUp(self):
         self.app = webmonitor.create_app()
         self.client = self.app.test_client()
-        self.queue = Queue(connection=webmonitor.start_worker.create_connection())
+        self.queue = rq.Queue(connection=webmonitor.start_worker.create_connection())
         # Make sure the queue's empty, then enqueue some jobs
         self.queue.empty()
         self.njobs = 2
@@ -22,6 +25,10 @@ class WebMonitorTest(unittest.TestCase):
             self.queue.enqueue(add, a=i, b=3)
         # Create some dummy request data
         self.request_data = json.dumps(dict(task_name='add'))
+
+    def tearDown(self):
+        """Remove test jobs from the queue."""
+        self.queue.empty()
 
     def get_json_response(self, url):
         """Return the rv for the URL and the decoded JSON data."""
