@@ -8,14 +8,14 @@ from flask import (
     # Generate URLs
     url_for,
     # Raise HTTP error code exceptions
-    abort
+    abort,
+    # Global object to store the rq.Queue
+    g
 )
 
 # Job queues
-from rq import Queue
-from rq.exceptions import NoSuchJobError
+import rq
 import start_worker
-queue = Queue(connection=start_worker.create_connection())
 
 jobs = Blueprint('jobs', __name__)
 
@@ -30,10 +30,13 @@ def serialize_job(job):
     )
     return d
 
+@jobs.before_request
+def initialise_queue():
+    g.queue = rq.Queue(connection=start_worker.create_connection())
 
 @jobs.route('/jobs', methods=['GET'])
 def get_jobs():
-    jobs = [serialize_job(j) for j in queue.get_jobs()]
+    jobs = [serialize_job(j) for j in g.queue.get_jobs()]
     return jsonify({'jobs': jobs})
 
 
@@ -60,14 +63,14 @@ def create_job():
         )), 400
     # Enqueue the task, passing empty arguments if none were provided
     args = data.get('args', {})
-    job = queue.enqueue(task, **args)
+    job = g.queue.enqueue(task, **args)
     return jsonify(dict(job=serialize_job(job))), 201
 
 
 @jobs.route('/jobs/<job_id>', methods=['GET'])
 def get_job(job_id):
     # Try to fetch the job, 404'ing if it's not found
-    job = queue.fetch_job(job_id)
+    job = g.queue.fetch_job(job_id)
     if job is None:
         abort(404)
     return jsonify(dict(job=serialize_job(job)))
