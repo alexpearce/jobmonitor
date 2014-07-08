@@ -21,6 +21,8 @@ setup(name='webmonitor',
         'rq>=0.3.13',
         'redis>=2.9.1'
     ],
+    test_suite='tests',
+    tests_require=['mock'],
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Programming Language :: Python :: 2',
