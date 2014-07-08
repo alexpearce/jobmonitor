@@ -4,7 +4,7 @@ import flask
 import webmonitor
 
 from rq import Queue
-from webmonitor.start_worker import conn
+import webmonitor.start_worker
 
 def add(a, b):
     """Task to put on the queue."""
@@ -14,7 +14,7 @@ class WebMonitorTest(unittest.TestCase):
     def setUp(self):
         self.app = webmonitor.create_app()
         self.client = self.app.test_client()
-        self.queue = Queue(connection=conn)
+        self.queue = Queue(connection=webmonitor.start_worker.create_connection())
         # Make sure the queue's empty, then enqueue some jobs
         self.queue.empty()
         self.njobs = 2

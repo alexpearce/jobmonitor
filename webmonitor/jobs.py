@@ -14,8 +14,8 @@ from flask import (
 # Job queues
 from rq import Queue
 from rq.exceptions import NoSuchJobError
-from start_worker import conn
-queue = Queue(connection=conn)
+import start_worker
+queue = Queue(connection=start_worker.create_connection())
 
 jobs = Blueprint('jobs', __name__)
 
