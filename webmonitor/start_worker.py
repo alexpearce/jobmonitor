@@ -13,8 +13,9 @@ def create_connection():
     """Return a redis.Redis instance connected to REDIS_URL."""
     # REDIS_URL is defined in .env and loaded into the environment by Honcho
     redis_url = os.getenv('REDIS_URL')
+    # If it's not defined, use the Redis default
     if not redis_url:
-        raise RuntimeError('Specify a REDIS_URL in .env')
+        redis_url = 'redis://localhost:6379'
     urlparse.uses_netloc.append('redis')
     url = urlparse.urlparse(redis_url)
     return redis.StrictRedis(
