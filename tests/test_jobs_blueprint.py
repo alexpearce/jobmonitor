@@ -58,16 +58,16 @@ class TestJobs(unittest2.TestCase):
         As this method checks the job URI with flask.url_for, it must be called
         in an app.test_request_context.
         """
-        assert job.has_key('id')
+        assert 'id' in job
         job_id = job['id']
-        assert job.has_key('uri')
+        assert 'uri' in job
         assert job['uri'] == flask.url_for('jobs.get_job',
             job_id=job_id, _external=True)
-        assert job.has_key('status')
+        assert 'status' in job
         # Status should be one of the values allowed by rq
         # https://github.com/nvie/rq/blob/0.4.6/rq/job.py#L30
         assert job['status'] in ('queued', 'finished', 'failed', 'started')
-        assert job.has_key('result')
+        assert 'result' in job
 
     def test_list_jobs(self):
         """The correct number of jobs should be returned."""
@@ -87,7 +87,7 @@ class TestJobs(unittest2.TestCase):
         rv = self.client.post('/jobs', data=self.request_data,
             content_type='application/json')
         data = json.loads(rv.data)
-        assert data.has_key('job')
+        assert 'job' in data
         assert rv.status_code == 201
         assert self.queue.count == (njobs + 1)
 
@@ -101,7 +101,7 @@ class TestJobs(unittest2.TestCase):
         """Only JSON requests can create jobs, else 400."""
         rv = self.client.post('/jobs', data=self.request_data)
         data = json.loads(rv.data)
-        assert data.has_key('message')
+        assert 'message' in data
         assert len(data['message']) > 0
         assert rv.status_code == 400
 
@@ -110,7 +110,7 @@ class TestJobs(unittest2.TestCase):
         job_id = self.queue.job_ids[0]
         rv, data = self.get_json_response('/jobs/{0}'.format(job_id))
         job = data['job']
-        assert job.has_key('id')
+        assert 'id' in job
 
     def test_get_job_serialisation(self):
         """All necessary information should be present in the job response."""
@@ -124,14 +124,14 @@ class TestJobs(unittest2.TestCase):
         rv = self.client.post('/jobs', data=json.dumps(dict()),
             content_type='application/json')
         data = json.loads(rv.data)
-        assert data.has_key('message')
+        assert 'message' in data
         assert len(data['message']) > 0
         assert rv.status_code == 400
 
     def test_not_found(self):
         """`404 not found` should be a JSON response with a message."""
         rv, data = self.get_json_response('/jobs/fake_id')
-        assert data.has_key('message')
+        assert 'message' in data
         assert len(data['message']) > 0
         assert rv.status_code == 404
 
