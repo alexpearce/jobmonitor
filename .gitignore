@@ -10,3 +10,5 @@ venv
 dump.rdb
 # Python eggs
 *.egg*
+# Tox
+.tox
