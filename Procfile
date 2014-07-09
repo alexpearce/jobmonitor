@@ -1,3 +1,3 @@
-web: gunicorn webmonitor:create_app
-worker: python webmonitor/start_worker.py
+web: gunicorn webmonitor:wsgi
+worker: python -m webmonitor.start_worker
 redis: redis-server /usr/local/etc/redis.conf

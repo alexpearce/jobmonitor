@@ -15,3 +15,7 @@ def create_app():
     app.register_blueprint(jobs)
 
     return app
+
+
+def wsgi(*args, **kwargs):
+    return create_app()(*args, **kwargs)
