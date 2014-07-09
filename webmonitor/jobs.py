@@ -15,7 +15,7 @@ from flask import (
 
 # Job queues
 import rq
-import start_worker
+from . import start_worker
 
 jobs = Blueprint('jobs', __name__)
 

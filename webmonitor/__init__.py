@@ -9,8 +9,8 @@ def create_app():
     app.config.from_object('webmonitor.config')
 
     # Add jobs API and generic views
-    from catchall import catchall
-    from jobs import jobs
+    from .catchall import catchall
+    from .jobs import jobs
     app.register_blueprint(catchall)
     app.register_blueprint(jobs)
 

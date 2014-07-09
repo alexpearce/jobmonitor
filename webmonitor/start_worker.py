@@ -3,7 +3,10 @@ Start a single rq worker to watch the queue database.
 A worker is only started if this file is called directly.
 """
 import os
-import urlparse
+try:
+    import urllib.parse as urlparse
+except ImportError:
+    import urlparse
 import redis
 import rq
 
@@ -28,7 +31,7 @@ def create_connection():
 def work():
     """Start an rq worker on the connection provided by create_connection."""
     with rq.Connection(create_connection()):
-        worker = rq.Worker(map(rq.Queue, listen))
+        worker = rq.Worker(list(map(rq.Queue, listen)))
         worker.work()
 
 if __name__ == '__main__':
