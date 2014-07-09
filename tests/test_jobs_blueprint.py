@@ -44,7 +44,7 @@ class TestJobs(unittest2.TestCase):
         for i in range(2):
             self.queue.enqueue('str', args=('foo',))
         # Dummy request data
-        self.request_data = json.dumps(dict(task_name='add'))
+        self.request_data = json.dumps(dict(task_name='str'))
 
     def get_json_response(self, url):
         """Return the rv for the URL and the decoded JSON data."""
