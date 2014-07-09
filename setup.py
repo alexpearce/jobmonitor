@@ -22,7 +22,7 @@ setup(name='webmonitor',
         'redis==2.10.1'
     ],
     test_suite='tests',
-    tests_require=['mock', 'fakeredis'],
+    tests_require=['unittest2', 'mock', 'fakeredis'],
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Programming Language :: Python :: 2',

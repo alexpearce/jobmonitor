@@ -1,4 +1,4 @@
-import unittest
+import unittest2
 import mock
 import json
 import flask
@@ -28,7 +28,7 @@ def mocked_resolve_connection(connection):
 @mock.patch('redis.StrictRedis', fakeredis.FakeStrictRedis)
 @mock.patch('rq.queue.resolve_connection', mocked_resolve_connection)
 @mock.patch('rq.job.resolve_connection', mocked_resolve_connection)
-class JobsTest(unittest.TestCase):
+class TestJobs(unittest2.TestCase):
     # The setUp method is not patched by the class decorators, and so we must
     # repeat ourselves
     @mock.patch('redis.StrictRedis', fakeredis.FakeStrictRedis)
@@ -137,4 +137,4 @@ class JobsTest(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    unittest.main()
+    unittest2.main()
