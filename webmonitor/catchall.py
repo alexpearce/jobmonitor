@@ -14,14 +14,16 @@ from flask import (
 # So we can catch Jinja2 exception
 from jinja2.exceptions import TemplateNotFound
 
-catchall = Blueprint('catchall', __name__, template_folder='templates', static_folder='static')
+catchall = Blueprint('catchall', __name__,
+                     template_folder='templates', static_folder='static')
+
 
 def default_child_path(path):
-    """Return the default child of the parent path, if it exists, else return path.
+    """Return the default child of the parent path ,if it exists, else path.
 
-    For example, the path `parent` should show the page `parent/child` by default,
-    unless another child is specified. This method will then return `parent/child`,
-    given `parent`. If `parent/child` should show `parent/child/grandchild` by default,
+    As an example, if the path `parent` show show the page `parent/child` by
+    default, this method will return `parent/child` given `parent`.
+    If `parent/child` should show `parent/child/grandchild` by default,
     this method will return `parent/child/grandchild` given `parent`.
     If no default child path exists, then `path` is returned.
     Keyword arguments:
@@ -29,7 +31,9 @@ def default_child_path(path):
     """
     try:
         # Recurse until we find a path with no default child
-        child_path = default_child_path(current_app.config['DEFAULT_CHILDREN'][path])
+        child_path = default_child_path(
+            current_app.config['DEFAULT_CHILDREN'][path]
+        )
     except KeyError:
         child_path = path
     return child_path

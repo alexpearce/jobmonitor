@@ -12,6 +12,7 @@ import rq
 
 listen = ['default']
 
+
 def create_connection():
     """Return a redis.Redis instance connected to REDIS_URL."""
     # REDIS_URL is defined in .env and loaded into the environment by Honcho
@@ -27,6 +28,7 @@ def create_connection():
         db=0,
         password=url.password
     )
+
 
 def work():
     """Start an rq worker on the connection provided by create_connection."""

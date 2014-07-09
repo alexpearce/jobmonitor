@@ -3,6 +3,7 @@ from flask import (
     Flask
 )
 
+
 def create_app():
     # Define the app and load its configuration from config.py
     app = Flask(__name__)

@@ -10,7 +10,9 @@ APP_NAME = 'Web Monitor'
 DEBUG = False
 
 # Where static assets are stored (images, stylesheets, and JavaScripts)
-ASSETS_DIRECTORY = '{0}/static'.format(os.path.dirname(os.path.abspath(__file__)))
+ASSETS_DIRECTORY = '{0}/static'.format(
+    os.path.dirname(os.path.abspath(__file__))
+)
 
 # Where ROOT files are stored
 FILES_DIRECTORY = '{0}/files'.format(ASSETS_DIRECTORY)

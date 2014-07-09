@@ -19,6 +19,7 @@ from . import start_worker
 
 jobs = Blueprint('jobs', __name__)
 
+
 # TODO finalise response format, i.e. what metadata we send with each response
 def serialize_job(job):
     """Return a dictionary representing the job."""
@@ -30,9 +31,11 @@ def serialize_job(job):
     )
     return d
 
+
 @jobs.before_request
 def initialise_queue():
     g.queue = rq.Queue(connection=start_worker.create_connection())
+
 
 @jobs.route('/jobs', methods=['GET'])
 def get_jobs():
@@ -75,10 +78,12 @@ def get_job(job_id):
         abort(404)
     return jsonify(dict(job=serialize_job(job)))
 
+
 @jobs.errorhandler(400)
 def bad_request(e):
     return jsonify(dict(message='Bad request')), 400
 
+
 @jobs.errorhandler(404)
-def bad_request(e):
+def not_found(e):
     return jsonify(dict(message='Resource not found')), 404
