@@ -17,7 +17,7 @@ def create_connection():
         raise RuntimeError('Specify a REDIS_URL in .env')
     urlparse.uses_netloc.append('redis')
     url = urlparse.urlparse(redis_url)
-    return redis.Redis(
+    return redis.StrictRedis(
         host=url.hostname,
         port=url.port,
         db=0,

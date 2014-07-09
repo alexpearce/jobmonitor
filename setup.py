@@ -18,11 +18,11 @@ setup(name='webmonitor',
     include_package_data = True,
     install_requires=[
         'Flask>=0.10.1',
-        'rq>=0.3.13',
-        'redis>=2.9.1'
+        'rq>=0.4.6',
+        'redis==2.10.1'
     ],
     test_suite='tests',
-    tests_require=['mock'],
+    tests_require=['mock', 'fakeredis'],
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Programming Language :: Python :: 2',
