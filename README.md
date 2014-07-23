@@ -1,7 +1,4 @@
-ROOT web monitoring
-===================
-
-[![Build status](https://travis-ci.org/alexpearce/root-web-monitoring.svg?branch=modularise)](http://travis-ci.org/alexpearce/root-web-monitoring)
+# ROOT web monitoring [![Build status](https://travis-ci.org/alexpearce/root-web-monitoring.svg?branch=modularise)](http://travis-ci.org/alexpearce/root-web-monitoring)
 
 A [Flask](http://flask.pocoo.org/) web application to view [ROOT](http://root.cern.ch/) histograms.
 
