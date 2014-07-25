@@ -2,11 +2,12 @@ from flask import (
     # Creating app instances
     Flask
 )
+from webmonitor import FlaskWithJobResolvers
 
 
 def create_app():
     # Define the app and load its configuration from config.py
-    app = Flask(__name__)
+    app = FlaskWithJobResolvers.FlaskWithJobResolvers(__name__)
     app.config.from_object('webmonitor.config')
 
     # Add jobs API and generic views

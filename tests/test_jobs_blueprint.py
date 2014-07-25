@@ -24,6 +24,14 @@ def mocked_resolve_connection(connection):
         connection._pttl = connection.pttl
     return connection
 
+def str_resolver(jname):
+    """Job resolver that always returns the str builtin name."""
+    return 'str'
+
+def conditional_resolver(jname):
+    """Job resolver that resolves to str_resolver if jnames start with 'a'."""
+    return str_resolver(jname) if jname.startswith('a') else None
+
 # The decorators on the TestCase class apply the patch to all test_* methods
 @mock.patch('redis.StrictRedis', fakeredis.FakeStrictRedis)
 @mock.patch('rq.queue.resolve_connection', mocked_resolve_connection)
@@ -44,7 +52,7 @@ class TestJobs(unittest2.TestCase):
         for i in range(2):
             self.queue.enqueue('str', args=('foo',))
         # Dummy request data
-        self.request_data = json.dumps(dict(task_name='str'))
+        self.request_data = json.dumps(dict(task_name='task_name'))
 
     def get_json_response(self, url):
         """Return the rv for the URL and the decoded JSON data."""
@@ -82,10 +90,14 @@ class TestJobs(unittest2.TestCase):
 
     def test_create_job(self):
         """Job response should be the new job and a success status code."""
+        # Add a job resolver so the job actually submits
+        self.app.add_job_resolver(str_resolver)
         # Get the number of jobs before the request, so we can compare after
         njobs = self.queue.count
         rv = self.client.post('/jobs', data=self.request_data,
             content_type='application/json')
+        # Remove the job resolver now we're done with it
+        self.app.remove_job_resolver(str_resolver)
         data = json.loads(rv.data)
         assert 'job' in data
         assert rv.status_code == 201
@@ -95,7 +107,21 @@ class TestJobs(unittest2.TestCase):
         """Attempting to create a job without a task name should give 400."""
         rv = self.client.post('/jobs', data=json.dumps(dict()),
             content_type='application/json')
+        data = json.loads(rv.data)
         assert rv.status_code == 400
+        assert 'message' in data
+        assert len('message') > 0
+
+    def test_invalid_job_creation_job_name_unresolved_task_name(self):
+        """Attempting to create a job with an unresolvable name should 400."""
+        # Add the conditional resolver that we know we'll fail
+        self.app.add_job_resolver(conditional_resolver)
+        rv = self.client.post('/jobs', data=json.dumps(dict(task_name='bcd')),
+            content_type='application/json')
+        data = json.loads(rv.data)
+        assert rv.status_code == 400
+        assert 'message' in data
+        assert len('message') > 0
 
     def test_invalid_job_creation_not_json(self):
         """Only JSON requests can create jobs, else 400."""

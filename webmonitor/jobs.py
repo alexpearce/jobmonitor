@@ -10,7 +10,9 @@ from flask import (
     # Raise HTTP error code exceptions
     abort,
     # Global object to store the rq.Queue
-    g
+    g,
+    # The app handling the current request
+    current_app
 )
 
 # Job queues
@@ -56,17 +58,15 @@ def create_job():
         return jsonify(dict(
             message='No task name provided'
         )), 400
-    try:
-        # TODO we don't have introspection as we don't know what methods are
-        # to the worker. are there any sanity check we can do?
-        task = 'monitoring_app.tasks.{0}'.format(task_name)
-    except AttributeError:
+    # Try to resolve the task name in to job name, 400 if left unresolved
+    jname = current_app.resolve_job(task_name)
+    if jname is None:
         return jsonify(dict(
             message='Invalid task name `{0}`'.format(task_name)
         )), 400
     # Enqueue the task, passing empty arguments if none were provided
     args = data.get('args', {})
-    job = g.queue.enqueue(task, **args)
+    job = g.queue.enqueue(jname, **args)
     return jsonify(dict(job=serialize_job(job))), 201
 
 
