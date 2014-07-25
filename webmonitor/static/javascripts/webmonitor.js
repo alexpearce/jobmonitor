@@ -277,16 +277,21 @@ var WebMonitor = (function($, undefined) {
   var init = function(pageModule, pages) {
     var components = pageModule.split('/'),
         parentModule = pages,
+        current = undefined,
         modules = [],
         $main = $('.main');
 
     // Work our way down the module chain, top to bottom, calling `init` on each successive child, if it exists.
     $.each(components, function(index, component) {
-      var current = parentModule[component];
-      modules.push(current);
-      parentModule = current;
-      if (current !== undefined && current.init !== undefined) {
-        current.init();
+      // If a child doesn't exist in its parent, set the parent to the empty object
+      if (component in parentModule) {
+          current = parentModule[component];
+          modules.push(current);
+          if (current !== undefined && current.init !== undefined) {
+            current.init();
+          }
+      } else {
+          parentModule = {};
       }
     });
 
