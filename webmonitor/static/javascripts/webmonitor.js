@@ -58,13 +58,13 @@ var WebMonitor = (function($, undefined) {
   //   undefined
   var drawHistogram = function(container, data, options) {
     var opt = $.extend(true, {}, WebMonitor.settings.histogramDefaults, options);
-    d3.select(container.get()[0]).append('svg')
+    var chart = d3.select(container.get()[0]).append('svg')
       .attr('width', container.width())
       .attr('height', container.height())
-      .chart('HistogramZoom')
+      .chart('AxesChart')
       .xAxisLabel(opt.xAxis.title.text)
-      .yAxisLabel(opt.yAxis.title.text)
-      .draw(data);
+      .yAxisLabel(opt.yAxis.title.text);
+    chart.addPlotable(d3.plotable.Histogram('histogram', data));
   };
 
   // Display a histogram, described by `data`, in `container`.
@@ -87,10 +87,10 @@ var WebMonitor = (function($, undefined) {
     for (var i = 0; i < values.length; i++) {
       var bins = binning[i];
       formattedData.push({
-        x: bins[0],
-        dx: bins[1],
+        xlow: bins[0],
+        xhigh: bins[1],
         y: data['values'][i],
-        xErr: uncertainties[i]
+        yerr: uncertainties[i]
       });
     }
     var options = {
