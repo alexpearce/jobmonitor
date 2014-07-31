@@ -182,7 +182,6 @@ var WebMonitor = (function($, undefined) {
     var components = pageModule.split('/'),
         parentModule = pages,
         current = undefined,
-        modules = [],
         $main = $('.main');
 
     // Work our way down the module chain, top to bottom, calling `init` on each successive child, if it exists.
@@ -190,10 +189,10 @@ var WebMonitor = (function($, undefined) {
       // If a child doesn't exist in its parent, set the parent to the empty object
       if (component in parentModule) {
           current = parentModule[component];
-          modules.push(current);
           if (current !== undefined && current.init !== undefined) {
             current.init();
           }
+          parentModule = current;
       } else {
           parentModule = {};
       }
