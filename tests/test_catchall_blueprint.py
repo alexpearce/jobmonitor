@@ -26,7 +26,7 @@ class TestCatchAll(unittest2.TestCase):
         """Global active path var should be set to the resolved child."""
         # We need to wrap the GET in a request context, else g won't persist
         with self.app.test_request_context():
-            rv = self.client.get('/')
+            self.client.get('/')
             # The call to render_template should have a first argument of
             # `{g.active_page}.html`
             assert mocked.call_args[0][0] == 'foo.html'
