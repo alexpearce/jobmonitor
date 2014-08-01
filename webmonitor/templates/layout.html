@@ -27,8 +27,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   {{ stylesheet_tag('//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css', False) }}
-  {{ stylesheet_tag('bootstrap-datepicker') }}
-  {{ stylesheet_tag('webmonitor') }}
+  {{ stylesheet_tag('webmonitor', blueprint='catchall') }}
   {% block stylesheets %}{% endblock %}
 </head>
 <body>
@@ -60,13 +59,13 @@
   <!-- D3 for plotting -->
   {{ javascript_tag('//cdnjs.cloudflare.com/ajax/libs/d3/3.4.6/d3.min.js', False) }}
   <!-- D3 charts for nice D3 charting -->
-  {{ javascript_tag('d3.chart.min') }}
+  {{ javascript_tag('d3.chart.min', blueprint='catchall') }}
   <!-- Our own D3 chart definitions (https://github.com/alexpearce/histograms) -->
-  {{ javascript_tag('d3.chart.histograms.min') }}
+  {{ javascript_tag('d3.chart.histograms.min', blueprint='catchall') }}
   <!-- Loading indicators with Spin.js -->
-  {{ javascript_tag('spin') }}
+  {{ javascript_tag('spin', blueprint='catchall') }}
   <!-- App JS. -->
-  {{ javascript_tag('webmonitor') }}
+  {{ javascript_tag('webmonitor', blueprint='catchall') }}
   <script>
     // Strings referring to page-specific modules in the webmonitor.js module.
     // The active_page var is formatted as parent_name/child_name, but the WebMonitor
