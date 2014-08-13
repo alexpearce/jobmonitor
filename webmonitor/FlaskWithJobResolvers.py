@@ -1,7 +1,9 @@
 from flask import Flask
 
+
 class ExistingJobResolverError(Exception):
     pass
+
 
 class FlaskWithJobResolvers(Flask):
     """A Flask app that manages the resolution of task names in to job names.

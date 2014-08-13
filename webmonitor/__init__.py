@@ -1,7 +1,3 @@
-from flask import (
-    # Creating app instances
-    Flask
-)
 from webmonitor import FlaskWithJobResolvers
 
 
