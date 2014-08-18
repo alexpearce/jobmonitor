@@ -53,11 +53,11 @@
     {% block maincontainer %}{% endblock %}
   </div>
   <!-- jQuery for AJAX calls and DOM manipulation. -->
-  {{ javascript_tag('lib/jquery.min') }}
+  {{ javascript_tag('lib/jquery.min', blueprint='catchall') }}
   <!-- Bootstrap.js for Bootstrap interactivity. -->
-  {{ javascript_tag('lib/bootstrap.min') }}
+  {{ javascript_tag('lib/bootstrap.min', blueprint='catchall') }}
   <!-- D3 for plotting -->
-  {{ javascript_tag('lib/d3.min') }}
+  {{ javascript_tag('lib/d3.min', blueprint='catchall') }}
   <!-- D3 charts for nice D3 charting -->
   {{ javascript_tag('lib/d3.chart.min', blueprint='catchall') }}
   <!-- Our own D3 chart definitions (https://github.com/alexpearce/histograms) -->
