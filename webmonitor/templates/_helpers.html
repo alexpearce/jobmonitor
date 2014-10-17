@@ -35,10 +35,10 @@
     g.active_page = 'parent/child'
 #}
 {% macro active_page_or_ancestor(page) %}
-  {# Strip off preceeding slash, if present
+  {#- Strip off preceeding slash, if present
      This is useful if the macro is used with url_for, which will insert
      slashes at the beginning of the name
-  #}
+  -#}
   {%- if page.startswith('/') %}{% set page = page[1:] %}{% endif -%}
   {%- if page == g.active_page[0:page | length] -%}
     True
