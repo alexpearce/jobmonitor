@@ -1,10 +1,10 @@
 """
-Configuration for the WebMonitor server.
+Configuration for the JobMonitor server.
 """
 import os
 
 # Application name, used in page titles etc.
-APP_NAME = 'Web Monitor'
+APP_NAME = 'Job Monitor'
 
 # Run the server in debug mode?
 DEBUG = False

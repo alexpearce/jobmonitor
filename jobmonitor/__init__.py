@@ -1,10 +1,10 @@
-from webmonitor import FlaskWithJobResolvers
+from jobmonitor import FlaskWithJobResolvers
 
 
 def create_app():
     # Define the app and load its configuration from config.py
     app = FlaskWithJobResolvers.FlaskWithJobResolvers(__name__)
-    app.config.from_object('webmonitor.config')
+    app.config.from_object('jobmonitor.config')
 
     # Add jobs API and generic views
     from .catchall import catchall

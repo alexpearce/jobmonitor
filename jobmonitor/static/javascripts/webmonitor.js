@@ -1,6 +1,6 @@
 // For more information on the 'revealing module' pattern, see
 //   http://addyosmani.com/resources/essentialjsdesignpatterns/book/#modulepatternjavascript
-var WebMonitor = (function($, undefined) {
+var JobMonitor = (function($, undefined) {
   'use strict';
 
   var settings = {
@@ -52,7 +52,7 @@ var WebMonitor = (function($, undefined) {
   //   taskName: Name of the task the job will run
   //   args: Object of arguments passed to the task as named arguments
   //   poll: Whether to poll the job until completion (default: true)
-  //     The job is polled in intervals of WebMonitor.settings.pollRate until
+  //     The job is polled in intervals of JobMonitor.settings.pollRate until
   //     the job status is not `queued` or `started`.
   // Returns:
   //   jQuery.Deferred object which fires `resolve` on job completion and fires

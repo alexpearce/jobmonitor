@@ -4,8 +4,8 @@ import json
 import flask
 import rq
 import fakeredis
-import webmonitor
-from webmonitor import start_worker
+import jobmonitor
+from jobmonitor import start_worker
 
 # The resolve_connection method in rq.connections calls patch_connection(conn)
 # in rq.compat.connections. This method checks if conn is an instance of
@@ -43,7 +43,7 @@ class TestJobs(unittest2.TestCase):
     @mock.patch('rq.queue.resolve_connection', mocked_resolve_connection)
     @mock.patch('rq.job.resolve_connection', mocked_resolve_connection)
     def setUp(self):
-        self.app = webmonitor.create_app()
+        self.app = jobmonitor.create_app()
         self.app.config['TESTING'] = True
         self.client = self.app.test_client()
         self.queue = rq.Queue(connection=start_worker.create_connection())

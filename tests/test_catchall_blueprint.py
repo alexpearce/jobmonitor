@@ -1,11 +1,11 @@
 import unittest2
 from mock import patch
 import flask
-import webmonitor
+import jobmonitor
 
 class TestCatchAll(unittest2.TestCase):
     def setUp(self):
-        self.app = webmonitor.create_app()
+        self.app = jobmonitor.create_app()
         self.client = self.app.test_client()
         # Set known DEFAULT_CHILDREN dict
         self.app.config['DEFAULT_CHILDREN'] = {
@@ -21,7 +21,7 @@ class TestCatchAll(unittest2.TestCase):
 
     # Mock out render_template else it will raise TemplateNotFound, calling
     # the 404 error handler and setting g.active_page to '404'
-    @patch('webmonitor.catchall.render_template')
+    @patch('jobmonitor.catchall.render_template')
     def test_active_path(self, mocked):
         """Global active path var should be set to the resolved child."""
         # We need to wrap the GET in a request context, else g won't persist

@@ -1,12 +1,12 @@
 {#
   Main layout template for the application.
-  Defines the overall HTML framework, and includes WebMonitor stylesheets and javascripts.
+  Defines the overall HTML framework, and includes JobMonitor stylesheets and javascripts.
   Extending templates have access to the following blocks:
 
-  * `stylesheets` - Extra stylesheets <link> tags in the header, after all WebMonitor stylesheets
+  * `stylesheets` - Extra stylesheets <link> tags in the header, after all JobMonitor stylesheets
   * `navbartop` - Top navigation bar
   * `maincontent` - Main content body below the navigation bar
-  * `javascripts`  Extra javascripts just before the closing <body> tag, after all WebMonitor javascripts
+  * `javascripts`  Extra javascripts just before the closing <body> tag, after all JobMonitor javascripts
 
   They also have access to the helpers defined in _helpers.html, as this templates includes that file.
 #}
@@ -27,7 +27,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   {{ stylesheet_tag('lib/bootstrap.min', blueprint='catchall') }}
-  {{ stylesheet_tag('webmonitor', blueprint='catchall') }}
+  {{ stylesheet_tag('jobmonitor', blueprint='catchall') }}
   {% block stylesheets %}{% endblock %}
 </head>
 <body>
@@ -65,10 +65,10 @@
   <!-- Loading indicators with Spin.js -->
   {{ javascript_tag('lib/spin.min', blueprint='catchall') }}
   <!-- App JS. -->
-  {{ javascript_tag('webmonitor', blueprint='catchall') }}
+  {{ javascript_tag('jobmonitor', blueprint='catchall') }}
   <script>
-    // Strings referring to page-specific modules in the webmonitor.js module.
-    // The active_page var is formatted as parent_name/child_name, but the WebMonitor
+    // Strings referring to page-specific modules in the jobmonitor.js module.
+    // The active_page var is formatted as parent_name/child_name, but the JobMonitor
     // module expects parentName/childName, so let's format it here.
     var activePage = '{{ g.active_page }}'.replace(/_([a-z])/g, function(match, char) {
       return char.toUpperCase();

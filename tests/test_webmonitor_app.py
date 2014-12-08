@@ -1,5 +1,5 @@
 import unittest2
-import webmonitor
+import jobmonitor
 
 def module_resolver(jname):
     """Job resolver which adds a module name (called foo)."""
@@ -9,9 +9,9 @@ def conditional_resolver(jname):
     """Passes jname to module_resolver if jname starts with a vowel."""
     return module_resolver(jname) if jname.startswith('a') else None
 
-class TestWebMonitor(unittest2.TestCase):
+class TestJobMonitor(unittest2.TestCase):
     def setUp(self):
-        self.app = webmonitor.create_app()
+        self.app = jobmonitor.create_app()
         self.client = self.app.test_client()
 
     def tearDown(self):
@@ -23,7 +23,7 @@ class TestWebMonitor(unittest2.TestCase):
         """App should derive from the correct class."""
         assert isinstance(
             self.app,
-            webmonitor.FlaskWithJobResolvers.FlaskWithJobResolvers
+            jobmonitor.FlaskWithJobResolvers.FlaskWithJobResolvers
         )
 
     def test_no_job_resolvers_on_instantiation(self):
@@ -39,7 +39,7 @@ class TestWebMonitor(unittest2.TestCase):
     def test_addition_of_duplicate_job_resolvers(self):
         self.app.add_job_resolver(module_resolver)
         nresolvers = len(self.app.job_resolvers())
-        with self.assertRaises(webmonitor.FlaskWithJobResolvers.ExistingJobResolverError):
+        with self.assertRaises(jobmonitor.FlaskWithJobResolvers.ExistingJobResolverError):
             self.app.add_job_resolver(module_resolver)
         # Ensure the job resolver count has remained constant
         assert len(self.app.job_resolvers()) == nresolvers
