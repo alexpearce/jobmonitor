@@ -15,7 +15,7 @@ setup(
     author_email='alex@alexpearce.me',
     url='https://github.com/alexpearce/jobmonitor',
     license=read('LICENSE'),
-    long_description=read('README.md'),
+    long_description=read('README.rst'),
     packages=['jobmonitor'],
     include_package_data=True,
     install_requires=[
