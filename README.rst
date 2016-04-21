@@ -1,15 +1,14 @@
 Job monitoring
 ==============
 
-A `Flask`_ web application to monitor `rq`_ jobs, with a preference for
-monitoring histograms using |d3.plotable|_.
+A `Flask`_ web application to monitor `rq`_ jobs.
 
 This base package allows you to quickly get a robust submit-poll loop up
 on running on the client side, with the server handling job submission
 and results retrieval.
 
 See |example-monitoring-app|_ for an example application that uses
-``jobmonitor`` to display `histograms`_ from a `ROOT`_ file, including
+``jobmonitor`` to display `histograms`_, including
 example deployment scripts in a `Vagrant`_ virtual machine.
 
 Installing
@@ -46,8 +45,8 @@ Flask’s development server.
     app = jobmonitor.create_app()
     app.run(debug=True)
 
-The `rq workers`_ can be started with a separate script. An `example`_ is included. A `Redis database`_ is
-expected to be running when the workers start.
+The `rq workers`_ can be started with a separate script. An `example`_ is
+included. A `Redis database`_ is expected to be running when the workers start.
 
 Testing
 -------
@@ -69,12 +68,9 @@ the |tox.ini|_ file.
 
 .. _Flask: http://flask.pocoo.org/
 .. _rq: http://python-rq.org/
-.. |d3.plotable| replace:: ``d3.plotable``
-.. _d3.plotable: https://github.com/alexpearce/histograms
 .. |example-monitoring-app| replace:: ``example-monitoring-app``
 .. _example-monitoring-app: https://github.com/alexpearce/example-monitoring-app
 .. _histograms: http://en.wikipedia.org/wiki/Histogram
-.. _ROOT: http://root.cern.ch/
 .. _Vagrant: https://www.vagrantup.com/
 .. _Pip: https://pip.pypa.io/en/latest/
 .. _PyPI: https://pypi.python.org/pypi/jobmonitor

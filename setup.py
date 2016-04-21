@@ -10,7 +10,7 @@ def read(fname):
 setup(
     name='jobmonitor',
     version='0.0.5',
-    description='Physics-orientated job monitoring over HTTP with Flask.',
+    description='Job monitoring over HTTP with Flask.',
     author='Alex Pearce',
     author_email='alex@alexpearce.me',
     url='https://github.com/alexpearce/jobmonitor',
