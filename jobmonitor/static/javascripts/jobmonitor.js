@@ -119,6 +119,9 @@ var JobMonitor = (function($, undefined) {
       // Did the job complete successfully or not?
       if (job['status'] === 'failed') {
         var message = '<p>The job completed unsuccessfully.</p>';
+        if (job['exec_info']) {
+          message = '<pre><code>' + job['exec_info'] + '</code></pre>';
+        }
         taskPromise.reject(message);
       } else {
         // Did the task the job was running finish successfully or not?

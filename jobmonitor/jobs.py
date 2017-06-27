@@ -29,6 +29,7 @@ def serialize_job(job):
         id=job.get_id(),
         uri=url_for('jobs.get_job', job_id=job.get_id(), _external=True),
         status=job.get_status(),
+        exec_info=job.exc_info,
         result=job.result
     )
     return d
